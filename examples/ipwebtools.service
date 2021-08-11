@@ -1,0 +1,29 @@
+[Unit]
+Description=IP Web Tools
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+SyslogIdentifier=ipwebtools
+StandardOutput=null
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/dev/ipwebtools
+ExecStart=/var/www/dev/ipwebtools/.venv/bin/gunicorn -k ipwebtools.workers.CustomWorker -w $WORKERS -b ${LISTENING}:${PORT} --timeout $TIMEOUT --pid /var/run/ipwebtools/server.pid --log-file=${LOG_DIR}/gunicorn.log ipwebtools:app
+Restart=always
+
+RuntimeDirectory=ipwebtools
+
+Environment=VIRTUAL_ENV=/var/www/dev/ipwebtools/.venv/
+Environment=WORKERS=2
+Environment=LISTENING=127.0.0.1
+Environment=TIMEOUT=60
+Environment=PORT=8000
+Environment=LOG_DIR=/var/log/ipwebtools/
+Environment=PATH=/var/www/dev/ipwebtools/.venv/bin:/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=-/var/www/dev/ipwebtools/.env
+
+
+[Install]
+WantedBy=multi-user.target

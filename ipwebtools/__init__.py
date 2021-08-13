@@ -12,6 +12,7 @@ from starlette_wtf import CSRFProtectMiddleware
 
 from ipwebtools import settings
 from ipwebtools.routes import routes
+from ipwebtools.errors import exception_handlers
 
 # Set up CSRF and Sessions middleware
 # Make sure to change the keys in .env file
@@ -22,4 +23,4 @@ middleware = [
 ]
 
 # Create the App
-app = Starlette(debug=settings.DEBUG, routes=routes, middleware=middleware)
+app = Starlette(debug=settings.DEBUG, routes=routes, middleware=middleware, exception_handlers=exception_handlers)

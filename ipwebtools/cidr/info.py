@@ -6,12 +6,16 @@
 #
 """CIDR Info Page."""
 import ipapi
+from ipwhois.net import Net
+from ipwhois.asn import IPASN
 
 from netaddr import IPNetwork, IPAddress, AddrFormatError
 from starlette_wtf import csrf_protect
 from ipwebtools.forms import CidrInfoForm
 
 from ipwebtools.templates import templates
+
+from pprint import pprint
 
 
 async def iploc_parse(ip_addr):
@@ -31,6 +35,21 @@ async def iploc_parse(ip_addr):
     except Exception:
         return
 
+async def ipasn_parse(ip_addr):
+    """Get IP ASN data.
+
+    Args:
+        ip_addr (str): IP Address to find location data from
+
+    Returns:
+        dict: IP ASN data
+    """
+    try:
+        obj = IPASN(Net(str(ip_addr)))
+        results = obj.lookup()
+        return results
+    except Exception:
+        return
 
 def get_useable(network):
     """Work out the first and last useable addresses in a subnet.
@@ -85,6 +104,7 @@ async def info(request):
 
             # Get IP location data
             results["info"] = await iploc_parse(cidr.ip)
+            results["asn_info"]  = await ipasn_parse(cidr.ip)
 
         except AddrFormatError as error:
             form.network.errors.append(error)

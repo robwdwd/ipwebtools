@@ -95,6 +95,14 @@
                                 <td class="table-light">ASN</td>
                                 <td>{{results.info.asn}}</td>
                             </tr>
+                            {% if results.asn_info %}
+                            <tr>
+                                <td class="table-light">Announced Prefix</td>
+                                <td>{{results.asn_info.asn_cidr}}</td>
+                                <td class="table-light">RIR</td>
+                                <td>{{results.asn_info.asn_registry}}</td>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 {% endif %}

@@ -73,5 +73,7 @@ async def ip_info(request):
 
         except AddrFormatError as error:
             form.ipaddress.errors.append(error)
+        except ValueError:
+            form.ipaddress.errors.append('Invalid IP Address.')
 
     return templates.TemplateResponse("info/ip.html", {"request": request, "results": results, "form": form})

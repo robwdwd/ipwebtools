@@ -31,3 +31,10 @@ class CidrInfoForm(StarletteForm):
 
     network = StringField("IP CIDR", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class IPInfoForm(StarletteForm):
+    """Form for IP Info Page."""
+
+    ipaddress = StringField("IP Address", validators=[DataRequired()])
+    submit = SubmitField("Submit")

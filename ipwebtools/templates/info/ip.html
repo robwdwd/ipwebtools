@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}CIDR Info
+{% endblock %}
+{% block page_title %}CIDR Info
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col">
+      <p class="fs-6">
+        Get information about an IP Address
+      </p>
+    </div>
+  </div>
+
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="row">
+      <div class="col">
+        {{ form.ipaddress.label(class="form-label") }}
+        {% if form.ipaddress.errors %}
+          {{ form.ipaddress(class="form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.ipaddress.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.ipaddress(class="form-control") }}
+        {% endif %}
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </div>
+  </form>
+
+  {% if results %}
+    <div class="row mt-4">
+      <div class="col">
+        <table class="table table-hover table-bordered">
+          <tbody>
+            <tr>
+              <td class="table-light">IP Address</td>
+              <td>{{results.ipaddress}}</td>
+            </tr>
+            <tr>
+              <td class="table-light">IP Version</td>
+              <td>{{results.version}}</td>
+            </tr>
+            {% if results.asn_info %}
+              <tr>
+                <td class="table-light">Announced Prefix</td>
+                <td>{{results.asn_info.asn_cidr}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">RIR</td>
+                <td>{{results.asn_info.asn_registry}}</td>
+              </tr>
+            {% endif %}
+            {% if results.info %}
+              <tr>
+                <td class="table-light">Org</td>
+                <td>{{results.info.org|default}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">ASN</td>
+                <td>{{results.info.asn}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">Country</td>
+                <td>{{results.info.country_name}}
+                  ({{results.info.country_code}})</td>
+              </tr>
+              <tr>
+                <td class="table-light">Region</td>
+                <td>{{results.info.region}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">City</td>
+                <td>{{results.info.city}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">Timezone</td>
+                <td>{{results.info.timezone}}
+                  (GMT{{results.info.utc_offset}})</td>
+              </tr>
+                            <tr>
+                <td class="table-light">Latitude / Longitude</td>
+                <td>{{results.info.latitude}}
+                  / {{results.info.longitude}}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock content %}

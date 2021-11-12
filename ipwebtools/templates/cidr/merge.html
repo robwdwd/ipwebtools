@@ -6,128 +6,127 @@
 {% endblock %}
 
 {% block content %}
+  <div class="row">
+    <div class="col">
+      <p>
+        Generate and consolidate
+        <strong>the shortest possible representation</strong>
+        of a list the IP addresses, CIDRs or IP ranges and optionally exclude some IP addresses, CIDRs or IP ranges from the list.
+
+        <a class="link-secondary" data-bs-toggle="collapse" href="#cidrMergeHelp" role="button" aria-expanded="false" aria-controls="cidrMergeHelp">
+          Click for valid inputs.
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="collapse" id="cidrMergeHelp">
     <div class="row">
-        <div class="col">
-            <p>
-                Generate and consolidate
-                <strong>the shortest possible representation</strong>
-                of a list the IP addresses, CIDRs or IP ranges and optionally exclude some IP addresses,
-                CIDRs or IP ranges from the list.
-
-                <a class="link-secondary" data-bs-toggle="collapse" href="#cidrMergeHelp" role="button" aria-expanded="false" aria-controls="cidrMergeHelp">
-                    Click for valid inputs.
-                </a>
-            </p>
-        </div>
+      <div class="col">
+        <ul class="list-unstyled">
+          <li>CIDR Blocks
+            <ul>
+              <li>192.168.0.0/24</li>
+              <li>172.16.0.129/27 - Works out correct boundry (i.e .128 here.)</li>
+              <li>8.8.8.8/32 - Accepts host addresses in CIDR format.</li>
+              <li>fc00:0:0:1::/64 - IPv6 CIDRs</li>
+              <li>2606:4700:4700::1111/128 - IPv6 host address.</li>
+            </ul>
+          </li>
+          <li>Hosts
+            <ul>
+              <li>192.168.0.1</li>
+              <li>8.8.8.4</li>
+              <li>2606:4700:4700::1001</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="list-unstyled">
+          <li>IP Ranges
+            <ul>
+              <li>192.168.0.0-192.168.0.255 - Can be on bitmask boundry.</li>
+              <li>172.16.0.128-172.16.0.140 - Can be off bitbask boundry.</li>
+              <li>127.255.255.0-128.0.1.255 - Can overlap subnets.</li>
+              <li>fc00:0:0:1::-fc00::1:ffff:ffff:ffff:ffff - IPv6 Ranges</li>
+            </ul>
+          </li>
+          <li>IP Glob Patterns (IPv4 only)
+            <ul>
+              <li>172.16.*.*</li>
+              <li>192.168.1.*</li>
+              <li>10.50.1-5.*</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 
-    <div class="collapse" id="cidrMergeHelp">
-        <div class="row">
-            <div class="col">
-                <ul class="list-unstyled">
-                    <li>CIDR Blocks
-                        <ul>
-                            <li>192.168.0.0/24</li>
-                            <li>172.16.0.129/27 - Works out correct boundry (i.e .128 here.)</li>
-                            <li>8.8.8.8/32 - Accepts host addresses in CIDR format.</li>
-                            <li>fc00:0:0:1::/64 - IPv6 CIDRs</li>
-                            <li>2606:4700:4700::1111/128 - IPv6 host address.</li>
-                        </ul>
-                    </li>
-                    <li>Hosts
-                        <ul>
-                            <li>192.168.0.1</li>
-                            <li>8.8.8.4</li>
-                            <li>2606:4700:4700::1001</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="col">
-                <ul class="list-unstyled">
-                    <li>IP Ranges
-                        <ul>
-                            <li>192.168.0.0-192.168.0.255 - Can be on bitmask boundry.</li>
-                            <li>172.16.0.128-172.16.0.140 - Can be off bitbask boundry.</li>
-                            <li>127.255.255.0-128.0.1.255 - Can overlap subnets.</li>
-                            <li>fc00:0:0:1::-fc00::1:ffff:ffff:ffff:ffff - IPv6 Ranges</li>
-                        </ul>
-                    </li>
-                    <li>IP Glob Patterns (IPv4 only)
-                        <ul>
-                            <li>172.16.*.*</li>
-                            <li>192.168.1.*</li>
-                            <li>10.50.1-5.*</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="row">
+      <div class="col">
+        {{ form.networks.label(class="form-label") }}
+        {% if form.networks.errors %}
+          {{ form.networks(class="form-control is-invalid",  rows="4") }}
+          <div class="invalid-feedback">
+            {% for error in form.networks.errors %}
+              {{ error }}
+              <br/>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.networks(class="form-control", rows="4") }}
+        {% endif %}
+      </div>
+
+      <div class="col">
+        {{ form.excluded.label(class="form-label") }}
+        {% if form.excluded.errors %}
+          {{ form.excluded(class="form-control is-invalid",  rows="4") }}
+          <div class="invalid-feedback">
+            {% for error in form.excluded.errors %}
+              {{ error }}
+              <br/>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.excluded(class="form-control", rows="4") }}
+        {% endif %}
+      </div>
     </div>
+    <div class="row mt-3">
+      <div class="col">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </div>
+  </form>
 
-    <form method="post">
-        {{ form.csrf_token }}
-        <div class="row">
-            <div class="col">
-                {{ form.networks.label(class="form-label") }}
-                {% if form.networks.errors %}
-                    {{ form.networks(class="form-control is-invalid",  rows="4") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.networks.errors %}
-                            {{ error }}
-                            <br/>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.networks(class="form-control", rows="4") }}
-                {% endif %}
-            </div>
-
-            <div class="col">
-                {{ form.excluded.label(class="form-label") }}
-                {% if form.excluded.errors %}
-                    {{ form.excluded(class="form-control is-invalid",  rows="4") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.excluded.errors %}
-                            {{ error }}
-                            <br/>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.excluded(class="form-control", rows="4") }}
-                {% endif %}
-            </div>
+  {% if results.cidrs %}
+    <div class="row row-cols-2 g-4 my-3">
+      <div class="col">
+        <div class="card h-100">
+          <h6 class="card-header">
+            CIDR Results
+          </h6>
+          <div class="card-body">
+            <pre><code>{{results.cidrs|join("\n")}}</code></pre>
+          </div>
         </div>
-        <div class="row mt-3">
-            <div class="col">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <h6 class="card-header">
+            IP Range Results
+          </h6>
+          <div class="card-body">
+            <pre><code>{{results.ranges|join("\n")}}</code></pre>
+          </div>
         </div>
-    </form>
-
-    {% if results.cidrs %}
-        <div class="row row-cols-2 g-4 my-3">
-            <div class="col">
-                <div class="card h-100">
-                    <h6 class="card-header">
-                        CIDR Results
-                    </h6>
-                    <div class="card-body">
-                        <pre><code>{{results.cidrs|join("\n")}}</code></pre>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <h6 class="card-header">
-                        IP Range Results
-                    </h6>
-                    <div class="card-body">
-                        <pre><code>{{results.ranges|join("\n")}}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+      </div>
+    </div>
+  {% endif %}
 
 {% endblock content %}

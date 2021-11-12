@@ -7,68 +7,67 @@
 
 {% block content %}
 
-
-    <div class="row">
-        <div class="col">
-            <p class="fs-6">
-                Subnet an IPv4 or IPv6 CIDR block into smaller subnets.
-            </p>
-        </div>
+  <div class="row">
+    <div class="col">
+      <p class="fs-6">
+        Subnet an IPv4 or IPv6 CIDR block into smaller subnets.
+      </p>
     </div>
+  </div>
 
-    <form method="post">
-        {{ form.csrf_token }}
-        <div class="row">
-            <div class="col">
-                {{ form.network.label(class="form-label") }}
-                {% if form.network.errors %}
-                    {{ form.network(class="form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.network.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.network(class="form-control") }}
-                {% endif %}
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="row">
+      <div class="col">
+        {{ form.network.label(class="form-label") }}
+        {% if form.network.errors %}
+          {{ form.network(class="form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.network.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.network(class="form-control") }}
+        {% endif %}
+      </div>
+      <div class="col">
+        {{ form.mask.label(class="form-label") }}
+        <div class="input-group mb-3">
+          <span class="input-group-text">/</span>
+          {% if form.mask.errors %}
+            {{ form.mask(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.mask.errors %}
+                {{ error }}
+              {% endfor %}
             </div>
-            <div class="col">
-                {{ form.mask.label(class="form-label") }}
-                <div class="input-group mb-3">
-                    <span class="input-group-text">/</span>
-                    {% if form.mask.errors %}
-                        {{ form.mask(class="form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.mask.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.mask(class="form-control", size="3") }}
-                    {% endif %}
-                </div>
-            </div>
+          {% else %}
+            {{ form.mask(class="form-control", size="3") }}
+          {% endif %}
         </div>
-        <div class="row mt-3">
-            <div class="col">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </div>
+  </form>
 
-    {% if results %}
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card w-100">
-                    <h6 class="card-header">
-                        Results
-                    </h6>
-                    <div class="card-body">
-                        <pre><code>{{results|join("\n")}}</code></pre>
-                    </div>
-                </div>
-            </div>
+  {% if results %}
+    <div class="row mt-4">
+      <div class="col">
+        <div class="card w-100">
+          <h6 class="card-header">
+            Results
+          </h6>
+          <div class="card-body">
+            <pre><code>{{results|join("\n")}}</code></pre>
+          </div>
         </div>
-    {% endif %}
+      </div>
+    </div>
+  {% endif %}
 
 {% endblock content %}

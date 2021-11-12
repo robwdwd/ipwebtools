@@ -9,13 +9,15 @@
 from starlette.routing import Route
 
 from ipwebtools.home import home
-from ipwebtools.cidr.info import info
+from ipwebtools.cidr.info import cidr_info
 from ipwebtools.cidr.split import split
 from ipwebtools.cidr.merge import merge
+from ipwebtools.info.ip import ip_info
 
 routes = [
     Route("/", endpoint=home),
-    Route("/cidr/info", endpoint=info, name="cidr_info", methods=["GET", "POST"]),
+    Route("/cidr/info", endpoint=cidr_info, name="cidr_info", methods=["GET", "POST"]),
     Route("/cidr/split", endpoint=split, name="cidr_split", methods=["GET", "POST"]),
     Route("/cidr/merge", endpoint=merge, name="cidr_merge", methods=["GET", "POST"]),
+    Route("/info/ip", endpoint=ip_info, name="ip_info", methods=["GET", "POST"]),
 ]

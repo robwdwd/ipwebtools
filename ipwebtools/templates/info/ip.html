@@ -50,8 +50,22 @@
             </tr>
             <tr>
               <td class="table-light">IP Version</td>
-              <td>{{results.version}}</td>
+              <td>IPv{{results.version}}</td>
             </tr>
+            {% if results.info %}
+              <tr>
+                <td class="table-light">Organisation</td>
+                <td>{{results.info.traits.autonomous_system_organization}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">ASN</td>
+                <td>{{results.info.traits.autonomous_system_number}}</td>
+              </tr>
+              <tr>
+                <td class="table-light">Specific Prefix</td>
+                <td>{{results.info.traits.network}}</td>
+              </tr>
+            {% endif %}
             {% if results.asn_info %}
               <tr>
                 <td class="table-light">Announced Prefix</td>
@@ -64,35 +78,36 @@
             {% endif %}
             {% if results.info %}
               <tr>
-                <td class="table-light">Org</td>
-                <td>{{results.info.org|default}}</td>
-              </tr>
-              <tr>
-                <td class="table-light">ASN</td>
-                <td>{{results.info.asn}}</td>
+                <td class="table-light">Continent</td>
+                <td>{{results.info.continent.name}}
+                  ({{results.info.continent.code}})</td>
               </tr>
               <tr>
                 <td class="table-light">Country</td>
-                <td>{{results.info.country_name}}
-                  ({{results.info.country_code}})</td>
+                <td>{{results.info.country.name}}
+                  ({{results.info.country.iso_code}})</td>
               </tr>
+              {% if results.info.subdivisions.0 %}
               <tr>
                 <td class="table-light">Region</td>
-                <td>{{results.info.region}}</td>
+                <td>{{results.info.subdivisions.0.name}}
+                  ({{results.info.subdivisions.0.iso_code}})</td>
               </tr>
+              {% endif %}
               <tr>
                 <td class="table-light">City</td>
-                <td>{{results.info.city}}</td>
+                <td>{{results.info.city.name}}</td>
               </tr>
               <tr>
                 <td class="table-light">Timezone</td>
-                <td>{{results.info.timezone}}
-                  (GMT{{results.info.utc_offset}})</td>
+                <td>{{results.info.location.time_zone}}
+                </td>
               </tr>
-                            <tr>
+              <tr>
                 <td class="table-light">Latitude / Longitude</td>
-                <td>{{results.info.latitude}}
-                  / {{results.info.longitude}}</td>
+                <td>{{results.info.location.latitude}}
+                  /
+                  {{results.info.location.longitude}}</td>
               </tr>
             {% endif %}
           </tbody>

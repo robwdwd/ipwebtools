@@ -5,7 +5,7 @@
 # have been included as part of this distribution.
 #
 """IP Info Page."""
-import ipapi
+import geoip2.webservice
 from ipwhois import IPWhois
 
 from netaddr import IPAddress, AddrFormatError
@@ -13,6 +13,11 @@ from starlette_wtf import csrf_protect
 from ipwebtools.forms import IPInfoForm
 
 from ipwebtools.templates import templates
+
+from ipwebtools.settings import GEOIP_API_KEY
+import pprint
+
+# pp = pprint.PrettyPrinter(indent=2, width=120)
 
 
 async def iploc_parse(ip_addr):
@@ -24,14 +29,14 @@ async def iploc_parse(ip_addr):
     Returns:
         dict: IP Location data
     """
-    try:
-        result = ipapi.location(ip_addr)
-        if "error" in result:
+    async with geoip2.webservice.AsyncClient(635047, GEOIP_API_KEY, host="geolite.info") as client:
+        try:
+            result = await client.city(ip_addr)
+            # pp.pprint(result)
+            return result
+        except Exception as error:
+            # pp.pprint(error)
             return
-        return result
-
-    except Exception:
-        return
 
 
 async def ipasn_parse(ip_addr):
@@ -74,6 +79,6 @@ async def ip_info(request):
         except AddrFormatError as error:
             form.ipaddress.errors.append(error)
         except ValueError:
-            form.ipaddress.errors.append('Invalid IP Address.')
+            form.ipaddress.errors.append("Invalid IP Address.")
 
     return templates.TemplateResponse("info/ip.html", {"request": request, "results": results, "form": form})

@@ -14,22 +14,22 @@ from ipwebtools.forms import IPInfoForm
 
 from ipwebtools.templates import templates
 
-from ipwebtools.settings import GEOIP_API_KEY
+from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_USER_ID
 import pprint
 
 # pp = pprint.PrettyPrinter(indent=2, width=120)
 
 
-async def iploc_parse(ip_addr):
-    """Get IP Location data.
+async def get_geoip(ip_addr):
+    """Get IP Location/GeoIP data.
 
     Args:
         ip_addr (str): IP Address to find location data from
 
     Returns:
-        dict: IP Location data
+        dict: IP Location/GeoIP data
     """
-    async with geoip2.webservice.AsyncClient(635047, GEOIP_API_KEY, host="geolite.info") as client:
+    async with geoip2.webservice.AsyncClient(GEOIP_USER_ID, GEOIP_API_KEY, host="geolite.info") as client:
         try:
             result = await client.city(ip_addr)
             # pp.pprint(result)
@@ -39,20 +39,36 @@ async def iploc_parse(ip_addr):
             return
 
 
-async def ipasn_parse(ip_addr):
-    """Get IP ASN data.
+async def get_ip_whois(ip_addr):
+    """Get IP Whois Data.
 
     Args:
         ip_addr (str): IP Address to find location data from
 
     Returns:
-        dict: IP ASN data
+        dict: IP whois data
     """
     try:
         obj = IPWhois(str(ip_addr))
         return obj.lookup_rdap()
     except Exception:
         return
+
+async def get_ip_info(ip_address):
+    """Get IP Info.
+
+    Args:
+        ip_addr (str): IP Address to find IP information data from.
+
+    Returns:
+        dict: IP Information
+    """
+
+    # Get Data from Maxmind
+    if GEOIP_ENABLED:
+       geoip = await iploc_parse(str(ipaddress))
+
+    ipinfo = await ipasn_parse(str(ipaddress))
 
 
 @csrf_protect
@@ -72,9 +88,7 @@ async def ip_info(request):
             # General info
             results["version"] = ipaddress.version
 
-            # Get IP location data
-            results["info"] = await iploc_parse(str(ipaddress))
-            results["asn_info"] = await ipasn_parse(str(ipaddress))
+            results["info"] = await get_ip_info(str(ipaddress))
 
         except AddrFormatError as error:
             form.ipaddress.errors.append(error)

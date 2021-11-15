@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipwebtools"
-version = "1.0.2"
+version = "1.1.0"
 description = "IP Web Tools for manipulation and information in IP Addresses, CIDRs, Subnets and Ranges."
 authors = ["Rob Woodward <rob@emailplus.org>"]
 license = "BSD-2-Clause"

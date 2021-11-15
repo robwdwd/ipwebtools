@@ -53,62 +53,77 @@
               <td>IPv{{results.version}}</td>
             </tr>
             {% if results.info %}
-              <tr>
-                <td class="table-light">Organisation</td>
-                <td>{{results.info.traits.autonomous_system_organization}}</td>
-              </tr>
-              <tr>
-                <td class="table-light">ASN</td>
-                <td>{{results.info.traits.autonomous_system_number}}</td>
-              </tr>
-              <tr>
-                <td class="table-light">Specific Prefix</td>
-                <td>{{results.info.traits.network}}</td>
-              </tr>
-            {% endif %}
-            {% if results.asn_info %}
-              <tr>
-                <td class="table-light">Announced Prefix</td>
-                <td>{{results.asn_info.asn_cidr}}</td>
-              </tr>
-              <tr>
-                <td class="table-light">RIR</td>
-                <td>{{results.asn_info.asn_registry}}</td>
-              </tr>
-            {% endif %}
-            {% if results.info %}
-              <tr>
-                <td class="table-light">Continent</td>
-                <td>{{results.info.continent.name}}
-                  ({{results.info.continent.code}})</td>
-              </tr>
-              <tr>
-                <td class="table-light">Country</td>
-                <td>{{results.info.country.name}}
-                  ({{results.info.country.iso_code}})</td>
-              </tr>
-              {% if results.info.subdivisions.0 %}
-              <tr>
-                <td class="table-light">Region</td>
-                <td>{{results.info.subdivisions.0.name}}
-                  ({{results.info.subdivisions.0.iso_code}})</td>
-              </tr>
+              {% if results.info.org %}
+                <tr>
+                  <td class="table-light">Organisation</td>
+                  <td>{{results.info.org}}</td>
+                </tr>
               {% endif %}
-              <tr>
-                <td class="table-light">City</td>
-                <td>{{results.info.city.name}}</td>
-              </tr>
-              <tr>
-                <td class="table-light">Timezone</td>
-                <td>{{results.info.location.time_zone}}
-                </td>
-              </tr>
-              <tr>
-                <td class="table-light">Latitude / Longitude</td>
-                <td>{{results.info.location.latitude}}
-                  /
-                  {{results.info.location.longitude}}</td>
-              </tr>
+              {% if results.info.asn %}
+                <tr>
+                  <td class="table-light">ASN</td>
+                  <td>{{results.info.asn}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.network %}
+                <tr>
+                  <td class="table-light">Subnet</td>
+                  <td>{{results.info.network}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.cidr %}
+                <tr>
+                  <td class="table-light">BGP Announced Prefix</td>
+                  <td>{{results.info.cidr}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.rir %}
+                <tr>
+                  <td class="table-light">RIR</td>
+                  <td>{{results.info.rir}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.continent %}
+                <tr>
+                  <td class="table-light">Continent</td>
+                  <td>{{results.info.continent.name}}
+                    ({{results.info.continent.code}})</td>
+                </tr>
+              {% endif %}
+              {% if results.info.country %}
+                <tr>
+                  <td class="table-light">Country</td>
+                  <td>{{results.info.country.name}}
+                    ({{results.info.country.code}})</td>
+                </tr>
+              {% endif %}
+              {% if results.info.region %}
+                <tr>
+                  <td class="table-light">Region</td>
+                  <td>{{results.info.region}}
+                  </td>
+                </tr>
+              {% endif %}
+              {% if results.info.city %}
+                <tr>
+                  <td class="table-light">City</td>
+                  <td>{{results.info.city}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.timezone %}
+                <tr>
+                  <td class="table-light">Timezone</td>
+                  <td>{{results.info.timezone}}</td>
+                </tr>
+              {% endif %}
+              {% if results.info.location %}
+                <tr>
+                  <td class="table-light">Latitude / Longitude</td>
+                  <td>{{results.info.location.latitude}}
+                    /
+                    {{results.info.location.longitude}}</td>
+                </tr>
+              {% endif %}
             {% endif %}
           </tbody>
         </table>

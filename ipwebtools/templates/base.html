@@ -1,40 +1,37 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top">
 
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 
     <title>
-        IPTools ::
-        {% block title %}IP Web Tools
-        {% endblock %}
+      IP Web Tools ::{% block title %} Home{% endblock %}
     </title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-</head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link href="{{ url_for('node', path='/@fortawesome/fontawesome-free/css/fontawesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('node', path='/@fortawesome/fontawesome-free/css/solid.min.css') }}" rel="stylesheet">
 
-<body>
+  </head>
+
+  <body>
     {% include 'navmenu.html' %}
+    <section class="section">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </section>
 
-    <div class="container mb-5">
-        <div class="row my-3">
-            <div class="col">
-                <h3 class="my-3 pb-2 border-bottom border-secondary">{% block page_title %}{% endblock %}
-                </h3>
-            </div>
-        </div>
+    <script src="{{ url_for('js', path='menu.js') }}"></script>
+    <script src="{{ url_for('node', path='/clipboard/dist/clipboard.min.js') }}"></script>
 
-        {% block content %}
-        {% endblock %}
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-        crossorigin="anonymous"></script>
-</body>
+    <script>
+      var clipboard = new ClipboardJS('.btn-copy')
+    </script>
+
+  </body>
 
 </html>

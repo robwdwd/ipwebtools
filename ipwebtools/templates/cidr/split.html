@@ -1,73 +1,85 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}CIDR Split
-{% endblock %}
-{% block page_title %}CIDR Split
+{% block title %}
+  CIDR Split
 {% endblock %}
 
 {% block content %}
+  <div class="columns is-tablet">
+    <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
+      <div class="card">
+        <header class="card-header">
+          <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
+          <p class="card-header-title">IP Info</p>
+        </header>
+        <div class="card-content">
+          <p class="subtitle is-7">Split a CIDR prefix into smaller subnets.</p>
+          <form method="post">
+            {{ form.csrf_token }}
 
-  <div class="row">
-    <div class="col">
-      <p class="fs-6">
-        Subnet an IPv4 or IPv6 CIDR block into smaller subnets.
-      </p>
+            <div class="field">
+              {{ form.network.label(class = 'label') }}
+              <div class="control is-expanded has-icons-left">
+                {% if form.network.errors %}
+                  {{ form.network(class = 'input is-danger') }}
+                {% else %}
+                  {{ form.network(class = 'input') }}
+                {% endif %}
+                <span class="icon is-small is-left"><i class="fa-solid fa-server"></i></span>
+              </div>
+              {% if form.network.errors %}
+                <p class="help is-danger">
+                  {% for error in form.network.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </p>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              {{ form.mask.label(class = 'label') }}
+              <div class="control is-expanded has-icons-left">
+                {% if form.mask.errors %}
+                  {{ form.mask(class = 'input is-danger') }}
+                {% else %}
+                  {{ form.mask(class = 'input') }}
+                {% endif %}
+                <span class="icon is-small is-left"><i class="fa-solid fa-slash fa-rotate-270"></i></span>
+              </div>
+              {% if form.mask.errors %}
+                <p class="help is-danger">
+                  {% for error in form.mask.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </p>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button class="button is-dark">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      {% if results %}
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Results</p>
+            <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_output"><span class="icon"><i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <div id="copy_output">
+                <pre style="background: transparent;"><code>{{ results|join('\n') }}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
-
-  <form method="post">
-    {{ form.csrf_token }}
-    <div class="row">
-      <div class="col">
-        {{ form.network.label(class="form-label") }}
-        {% if form.network.errors %}
-          {{ form.network(class="form-control is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.network.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% else %}
-          {{ form.network(class="form-control") }}
-        {% endif %}
-      </div>
-      <div class="col">
-        {{ form.mask.label(class="form-label") }}
-        <div class="input-group mb-3">
-          <span class="input-group-text">/</span>
-          {% if form.mask.errors %}
-            {{ form.mask(class="form-control is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in form.mask.errors %}
-                {{ error }}
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ form.mask(class="form-control", size="3") }}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        {{ form.submit(class="btn btn-primary") }}
-      </div>
-    </div>
-  </form>
-
-  {% if results %}
-    <div class="row mt-4">
-      <div class="col">
-        <div class="card w-100">
-          <h6 class="card-header">
-            Results
-          </h6>
-          <div class="card-body">
-            <pre><code>{{results|join("\n")}}</code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-{% endblock content %}
+{% endblock %}

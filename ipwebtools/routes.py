@@ -7,6 +7,8 @@
 """Setup routes."""
 
 from starlette.routing import Route
+from starlette.routing import Mount
+from starlette.staticfiles import StaticFiles
 
 from ipwebtools.home import home
 from ipwebtools.cidr.info import cidr_info
@@ -20,4 +22,6 @@ routes = [
     Route("/cidr/split", endpoint=split, name="cidr_split", methods=["GET", "POST"]),
     Route("/cidr/merge", endpoint=merge, name="cidr_merge", methods=["GET", "POST"]),
     Route("/info/ip", endpoint=ip_info, name="ip_info", methods=["GET", "POST"]),
+    Mount("/node", app=StaticFiles(directory="node_modules"), name="node"),
+    Mount("/js", app=StaticFiles(directory="js"), name="js"),
 ]

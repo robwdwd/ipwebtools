@@ -1,134 +1,139 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}CIDR Info
-{% endblock %}
-{% block page_title %}CIDR Info
+{% block title %}
+  IP Address Info
 {% endblock %}
 
 {% block content %}
 
-  <div class="row">
-    <div class="col">
-      <p class="fs-6">
-        Get information about an IP Address
-      </p>
-    </div>
-  </div>
+  <div class="columns is-tablet">
+    <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
+      <div class="card">
+        <header class="card-header">
+          <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
+          <p class="card-header-title">IP Info</p>
+        </header>
+        <div class="card-content">
 
-  <form method="post">
-    {{ form.csrf_token }}
-    <div class="row">
-      <div class="col">
-        {{ form.ipaddress.label(class="form-label") }}
-        {% if form.ipaddress.errors %}
-          {{ form.ipaddress(class="form-control is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.ipaddress.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% else %}
-          {{ form.ipaddress(class="form-control") }}
-        {% endif %}
+        <p class="subtitle is-7">Get information about an IP Address</p>
+          <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="field">
+              {{ form.ipaddress.label(class = 'label') }}
+              <div class="control is-expanded has-icons-left">
+                {% if form.ipaddress.errors %}
+                  {{ form.ipaddress(class = 'input is-danger') }}
+                {% else %}
+                  {{ form.ipaddress(class = 'input') }}
+                {% endif %}
+                <span class="icon is-small is-left"><i class="fa-solid fa-server"></i></span>
+              </div>
+              {% if form.ipaddress.errors %}
+                <p class="help is-danger">
+                  {% for error in form.ipaddress.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </p>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button class="button is-dark">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    <div class="row mt-3">
-      <div class="col">
-        {{ form.submit(class="btn btn-primary") }}
-      </div>
-    </div>
-  </form>
-
-  {% if results %}
-    <div class="row mt-4">
-      <div class="col">
-        <table class="table table-hover table-bordered">
+    <div class="column">
+      {% if results %}
+        <table class="table is-hoverable is-fullwidth is-bordered">
           <tbody>
             <tr>
-              <td class="table-light">IP Address</td>
-              <td>{{results.ipaddress}}</td>
+              <th>IP Address</th>
+              <td>{{ results.ipaddress }}</td>
             </tr>
             <tr>
-              <td class="table-light">IP Version</td>
-              <td>IPv{{results.version}}</td>
+              <th>IP Version</th>
+              <td>IPv{{ results.version }}</td>
             </tr>
             {% if results.info %}
               {% if results.info.org %}
                 <tr>
-                  <td class="table-light">Organisation</td>
-                  <td>{{results.info.org}}</td>
+                  <th>Organisation</th>
+                  <td>{{ results.info.org }}</td>
                 </tr>
               {% endif %}
               {% if results.info.asn %}
                 <tr>
-                  <td class="table-light">ASN</td>
-                  <td>{{results.info.asn}}</td>
+                  <th>ASN</th>
+                  <td>{{ results.info.asn }}</td>
                 </tr>
               {% endif %}
               {% if results.info.network %}
                 <tr>
-                  <td class="table-light">Subnet</td>
-                  <td>{{results.info.network}}</td>
+                  <th>Subnet</th>
+                  <td>{{ results.info.network }}</td>
                 </tr>
               {% endif %}
               {% if results.info.cidr %}
                 <tr>
-                  <td class="table-light">BGP Announced Prefix</td>
-                  <td>{{results.info.cidr}}</td>
+                  <th>BGP Announced Prefix</th>
+                  <td>{{ results.info.cidr }}</td>
                 </tr>
               {% endif %}
               {% if results.info.rir %}
                 <tr>
-                  <td class="table-light">RIR</td>
-                  <td>{{results.info.rir}}</td>
+                  <th>RIR</th>
+                  <td>{{ results.info.rir }}</td>
                 </tr>
               {% endif %}
               {% if results.info.continent %}
                 <tr>
-                  <td class="table-light">Continent</td>
-                  <td>{{results.info.continent.name}}
-                    ({{results.info.continent.code}})</td>
+                  <th>Continent</th>
+                  <td>{{ results.info.continent.name }}
+                    ({{ results.info.continent.code }})</td>
                 </tr>
               {% endif %}
               {% if results.info.country %}
                 <tr>
-                  <td class="table-light">Country</td>
-                  <td>{{results.info.country.name}}
-                    ({{results.info.country.code}})</td>
+                  <th>Country</th>
+                  <td>{{ results.info.country.name }}
+                    ({{ results.info.country.code }})</td>
                 </tr>
               {% endif %}
               {% if results.info.region %}
                 <tr>
-                  <td class="table-light">Region</td>
-                  <td>{{results.info.region}}
-                  </td>
+                  <th>Region</th>
+                  <td>{{ results.info.region }}</td>
                 </tr>
               {% endif %}
               {% if results.info.city %}
                 <tr>
-                  <td class="table-light">City</td>
-                  <td>{{results.info.city}}</td>
+                  <th>City</th>
+                  <td>{{ results.info.city }}</td>
                 </tr>
               {% endif %}
               {% if results.info.timezone %}
                 <tr>
-                  <td class="table-light">Timezone</td>
-                  <td>{{results.info.timezone}}</td>
+                  <th>Timezone</th>
+                  <td>{{ results.info.timezone }}</td>
                 </tr>
               {% endif %}
               {% if results.info.location %}
                 <tr>
-                  <td class="table-light">Latitude / Longitude</td>
-                  <td>{{results.info.location.latitude}}
+                  <th>Latitude / Longitude</th>
+                  <td>{{ results.info.location.latitude }}
                     /
-                    {{results.info.location.longitude}}</td>
+                    {{ results.info.location.longitude }}</td>
                 </tr>
               {% endif %}
             {% endif %}
           </tbody>
         </table>
-      </div>
+      {% endif %}
     </div>
-  {% endif %}
-
-{% endblock content %}
+  </div>
+{% endblock %}

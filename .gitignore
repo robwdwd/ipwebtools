@@ -73,3 +73,5 @@ dmypy.json
 
 # edit temp files
 *.swp
+
+node_modules

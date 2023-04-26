@@ -5,70 +5,75 @@
 # have been included as part of this distribution.
 #
 """IP Info Page."""
-import geoip2.webservice
+
+from typing import Union
+
+from geoip2.errors import GeoIP2Error
+from geoip2.models import City
+from geoip2.records import Subdivision
+from geoip2.webservice import AsyncClient
 from ipwhois import IPWhois
 from netaddr import AddrFormatError, IPAddress
+from starlette.concurrency import run_in_threadpool
 from starlette_wtf import csrf_protect
 
 from ipwebtools.forms import IPInfoForm
 from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
 from ipwebtools.templates import templates
 
-# import pprint
 
-# pp = pprint.PrettyPrinter(indent=2, width=120)
-
-
-async def get_geoip(ip_addr):
+async def get_geoip(ip_addr: IPAddress) -> Union[City, None]:
     """Get IP Location/GeoIP data.
 
     Args:
-        ip_addr (str): IP Address to find location data from
+        ip_addr (IPAddress): IP Address to find location data from
 
     Returns:
         dict: IP Location/GeoIP data
     """
-    async with geoip2.webservice.AsyncClient(int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST) as client:
+    async with AsyncClient(int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST) as client:
         try:
-            result = await client.city(ip_addr)
-            return result
-        except Exception:
+            return await client.city(str(ip_addr))
+        except GeoIP2Error:
             return
 
 
-async def get_ip_whois(ip_addr):
+async def get_ip_whois(ip_addr: IPAddress) -> Union[dict, None]:
     """Get IP Whois Data.
 
     Args:
-        ip_addr (str): IP Address to find location data from
+        ip_addr (IPAddress): IP Address to find location data from
 
     Returns:
         dict: IP whois data
     """
     try:
-        obj = IPWhois(ip_addr)
-        return obj.lookup_rdap()
+        obj = IPWhois(str(ip_addr))
+        return await run_in_threadpool(obj.lookup_rdap)
     except Exception:
         return
 
 
-def format_subdiv(subdiv):
+def format_subdiv(subdiv: Subdivision) -> str:
     """Format subdivsion from maxmind into string.
 
     Args:
-        subdivision (subdivision): Subdivision.
+        subdiv(Subdivision): Subdivision.
 
     Returns:
         str: formated subdivision
     """
-    return subdiv.name + " (" + subdiv.iso_code + ")"
+    if subdiv.name:
+        return f"{subdiv.name} ({subdiv.iso_code})"
+    else:
+        return ""
 
 
-async def get_ip_info(ip_address):
+async def get_ip_info(ip_address: IPAddress) -> dict:
     """Get IP Info.
 
     Args:
-        ip_addr (str): IP Address to find IP information data from.
+        ip_addr (IPAddress): IP Address to find IP information data from.
 
     Returns:
         dict: IP Information
@@ -116,7 +121,7 @@ async def ip_info(request):
             # General info
             results["version"] = ipaddress.version
 
-            results["info"] = await get_ip_info(results["ipaddress"])
+            results["info"] = await get_ip_info(ipaddress)
 
         except AddrFormatError as error:
             form.ipaddress.errors.append(error)

@@ -6,6 +6,7 @@
 #
 """Error handling."""
 
+
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
@@ -21,9 +22,9 @@ async def http_exception(request: Request, exc: HTTPException):
 
 
 async def csrf_redirect(request: Request, exc: HTTPException):
-    return RedirectResponse(request.url_for("home"), 302)
+    return RedirectResponse(request.url, 302)
 
 
 exception_handlers = {CSRFError: csrf_redirect, HTTPException: http_exception}
-
+# exception_handlers = {HTTPException: http_exception}
 # exception_handlers = {404: not_found, 500: server_error, 403: forbidden}

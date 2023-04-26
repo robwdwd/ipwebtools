@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -6,14 +6,13 @@
 #
 """Setup routes."""
 
-from starlette.routing import Route
-from starlette.routing import Mount
+from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 
-from ipwebtools.home import home
 from ipwebtools.cidr.info import cidr_info
-from ipwebtools.cidr.split import split
 from ipwebtools.cidr.merge import merge
+from ipwebtools.cidr.split import split
+from ipwebtools.home import home
 from ipwebtools.info.ip import ip_info
 
 routes = [

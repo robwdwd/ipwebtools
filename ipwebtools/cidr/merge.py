@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -7,8 +7,9 @@
 """CIDR Merge Page."""
 import re
 
+from netaddr import AddrFormatError, IPGlob, IPNetwork, IPRange, IPSet
 from starlette_wtf import csrf_protect
-from netaddr import IPSet, IPNetwork, IPRange, IPGlob, AddrFormatError
+
 from ipwebtools.forms import CidrMergeForm
 from ipwebtools.templates import templates
 

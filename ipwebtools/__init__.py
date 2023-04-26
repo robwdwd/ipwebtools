@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -11,8 +11,8 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette_wtf import CSRFProtectMiddleware
 
 from ipwebtools import settings
-from ipwebtools.routes import routes
 from ipwebtools.errors import exception_handlers
+from ipwebtools.routes import routes
 
 # Set up CSRF and Sessions middleware
 # Make sure to change the keys in .env file

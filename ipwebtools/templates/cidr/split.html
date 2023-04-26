@@ -10,7 +10,7 @@
       <div class="card">
         <header class="card-header">
           <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
-          <p class="card-header-title">IP Info</p>
+          <p class="card-header-title">CIDR Split</p>
         </header>
         <div class="card-content">
           <p class="subtitle is-7">Split a CIDR prefix into smaller subnets.</p>
@@ -74,7 +74,9 @@
           <div class="card-content">
             <div class="content">
               <div id="copy_output">
-                <pre style="background: transparent;"><code>{{ results|join('\n') }}</code></pre>
+                <pre style="background: transparent;">
+                  <code>{{ results|join('\n') }}</code>
+                </pre>
               </div>
             </div>
           </div>

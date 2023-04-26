@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -6,6 +6,7 @@
 #
 """Helper App to run ip web tools in development mode."""
 import uvicorn
+
 from ipwebtools import settings
 
 if __name__ == "__main__":

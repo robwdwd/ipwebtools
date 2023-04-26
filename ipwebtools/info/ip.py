@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -7,14 +7,12 @@
 """IP Info Page."""
 import geoip2.webservice
 from ipwhois import IPWhois
-
-from netaddr import IPAddress, AddrFormatError
+from netaddr import AddrFormatError, IPAddress
 from starlette_wtf import csrf_protect
+
 from ipwebtools.forms import IPInfoForm
-
+from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
 from ipwebtools.templates import templates
-
-from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_USER_ID, GEOIP_HOST
 
 # import pprint
 
@@ -30,9 +28,7 @@ async def get_geoip(ip_addr):
     Returns:
         dict: IP Location/GeoIP data
     """
-    async with geoip2.webservice.AsyncClient(
-        int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST
-    ) as client:
+    async with geoip2.webservice.AsyncClient(int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST) as client:
         try:
             result = await client.city(ip_addr)
             return result
@@ -90,7 +86,6 @@ async def get_ip_info(ip_address):
     if GEOIP_ENABLED:
         geoip_data = await get_geoip(ip_address)
         if geoip_data:
-
             ipdata["continent"] = {"name": geoip_data.continent.name, "code": geoip_data.continent.code}
             ipdata["country"] = {"name": geoip_data.country.name, "code": geoip_data.country.iso_code}
             ipdata["city"] = geoip_data.city.name

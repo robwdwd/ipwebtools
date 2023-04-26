@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -6,8 +6,9 @@
 #
 """CIDR Split Page."""
 
+from netaddr import AddrFormatError, IPNetwork
 from starlette_wtf import csrf_protect
-from netaddr import IPNetwork, AddrFormatError
+
 from ipwebtools.forms import CidrSplitForm
 from ipwebtools.templates import templates
 

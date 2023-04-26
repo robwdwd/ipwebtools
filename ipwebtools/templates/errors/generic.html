@@ -1,5 +1,8 @@
-{% extends "errors/base.html" %}
+{% extends 'errors/base.html' %}
 
-
-{% block title %}Error{% endblock title %}
-{% block message %}{{ error }}{% endblock message %}
+{% block title %}
+  Error
+{% endblock %}
+{% block message %}
+  {{ error }}
+{% endblock %}

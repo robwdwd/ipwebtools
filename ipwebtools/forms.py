@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Rob Woodward. All rights reserved.
+# Copyright (c) 2023, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -6,7 +6,7 @@
 #
 """Application forms."""
 from starlette_wtf import StarletteForm
-from wtforms import TextAreaField, IntegerField, StringField, SubmitField
+from wtforms import IntegerField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
 
 

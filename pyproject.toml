@@ -10,7 +10,7 @@ include = ["README.md", "LICENSE", "app.py", "examples"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-uvicorn = "^0.23.2"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
 gunicorn = "^21.2.0"
 starlette = "^0.31.0"
 Jinja2 = "^3.0.1"

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipwebtools"
-version = "1.2.0"
+version = "1.2.1"
 description = "IP Web Tools for manipulation and information in IP Addresses, CIDRs, Subnets and Ranges."
 authors = ["Rob Woodward <rob@emailplus.org>"]
 license = "BSD-2-Clause"
@@ -10,9 +10,9 @@ include = ["README.md", "LICENSE", "app.py", "examples"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-uvicorn = {extras = ["standard"], version = "^0.21.0"}
-gunicorn = "^20.1.0"
-starlette = "^0.26.0"
+uvicorn = "^0.23.2"
+gunicorn = "^21.2.0"
+starlette = "^0.31.0"
 Jinja2 = "^3.0.1"
 Starlette-WTF = "^0.4.3"
 netaddr = "^0.8.0"

@@ -1,4 +1,4 @@
-# Copyright (c) 2023, Rob Woodward. All rights reserved.
+# Copyright (c) 2024, Rob Woodward. All rights reserved.
 #
 # This file is part of IP Web Tools and is released under the
 # "BSD 2-Clause License". Please see the LICENSE file that should
@@ -6,20 +6,22 @@
 #
 """IP Info Page."""
 
+import pprint
 from typing import Union
 
 from geoip2.errors import GeoIP2Error
 from geoip2.models import City
 from geoip2.records import Subdivision
 from geoip2.webservice import AsyncClient
-from ipwhois import IPWhois
 from netaddr import AddrFormatError, IPAddress
-from starlette.concurrency import run_in_threadpool
 from starlette_wtf import csrf_protect
 
+from ipwebtools.bgpview import get_bgpview_ip_info
 from ipwebtools.forms import IPInfoForm
 from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
 from ipwebtools.templates import templates
+
+pp = pprint.PrettyPrinter(indent=2, width=120)
 
 
 async def get_geoip(ip_addr: IPAddress) -> Union[City, None]:
@@ -36,22 +38,6 @@ async def get_geoip(ip_addr: IPAddress) -> Union[City, None]:
             return await client.city(str(ip_addr))
         except GeoIP2Error:
             return
-
-
-async def get_ip_whois(ip_addr: IPAddress) -> Union[dict, None]:
-    """Get IP Whois Data.
-
-    Args:
-        ip_addr (IPAddress): IP Address to find location data from
-
-    Returns:
-        dict: IP whois data
-    """
-    try:
-        obj = IPWhois(str(ip_addr))
-        return await run_in_threadpool(obj.lookup_rdap)
-    except Exception:
-        return
 
 
 def format_subdiv(subdiv: Subdivision) -> str:
@@ -79,13 +65,15 @@ async def get_ip_info(ip_address: IPAddress) -> dict:
         dict: IP Information
     """
     ipdata = {}
-    ip_whois_data = await get_ip_whois(ip_address)
 
-    if ip_whois_data:
-        ipdata["asn"] = ip_whois_data["asn"]
-        ipdata["cidr"] = ip_whois_data["asn_cidr"]
-        ipdata["rir"] = ip_whois_data["asn_registry"]
-        ipdata["org"] = ip_whois_data["asn_description"]
+    bgpview_data = await get_bgpview_ip_info(str(ip_address))
+
+    pp.pprint(bgpview_data)
+
+    if bgpview_data:
+        ipdata["ptr_record"] = bgpview_data["ptr_record"]
+        ipdata["prefixes"] = bgpview_data["prefixes"]
+        ipdata["rir"] = bgpview_data["rir_allocation"]
 
     # Get Data from Maxmind
     if GEOIP_ENABLED:

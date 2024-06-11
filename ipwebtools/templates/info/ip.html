@@ -9,7 +9,9 @@
     <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
       <div class="card">
         <header class="card-header">
-          <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fa-solid fa-table-list"></i></span></button>
           <p class="card-header-title">IP Info</p>
         </header>
         <div class="card-content">
@@ -25,7 +27,9 @@
                 {% else %}
                   {{ form.ipaddress(class = 'input') }}
                 {% endif %}
-                <span class="icon is-small is-left"><i class="fa-solid fa-server"></i></span>
+                <span class="icon is-small is-left">
+                  <i class="fa-solid fa-server"></i>
+                </span>
               </div>
               {% if form.ipaddress.errors %}
                 <p class="help is-danger">
@@ -58,16 +62,17 @@
               <td>IPv{{ results.version }}</td>
             </tr>
             {% if results.info %}
+
+              {% if results.info.ptr_record %}
+                <tr>
+                  <th>Reverse DNS</th>
+                  <td>{{ results.info.ptr_record }}</td>
+                </tr>
+              {% endif %}
               {% if results.info.org %}
                 <tr>
                   <th>Organisation</th>
                   <td>{{ results.info.org }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.asn %}
-                <tr>
-                  <th>ASN</th>
-                  <td>{{ results.info.asn }}</td>
                 </tr>
               {% endif %}
               {% if results.info.network %}
@@ -76,17 +81,25 @@
                   <td>{{ results.info.network }}</td>
                 </tr>
               {% endif %}
-              {% if results.info.cidr %}
-                <tr>
-                  <th>BGP Announced Prefix</th>
-                  <td>{{ results.info.cidr }}</td>
-                </tr>
-              {% endif %}
               {% if results.info.rir %}
-                <tr>
-                  <th>RIR</th>
-                  <td>{{ results.info.rir }}</td>
-                </tr>
+                {% if results.info.rir.name %}
+                  <tr>
+                    <th>RIR</th>
+                    <td>{{ results.info.rir.name }}</td>
+                  </tr>
+                {% endif %}
+                {% if results.info.rir.allocation_status %}
+                  <tr>
+                    <th>Status</th>
+                    <td>{{ results.info.rir.allocation_status }}</td>
+                  </tr>
+                {% endif %}
+                {% if results.info.rir.date_allocated %}
+                  <tr>
+                    <th>Date Allocated</th>
+                    <td>{{ results.info.rir.date_allocated }}</td>
+                  </tr>
+                {% endif %}
               {% endif %}
               {% if results.info.continent %}
                 <tr>
@@ -131,6 +144,34 @@
             {% endif %}
           </tbody>
         </table>
+        {% if results.info.prefixes %}
+          <table class="table is-hoverable is-fullwidth is-bordered">
+            <thead>
+              <th>Prefix</th>
+              <th>Country</th>
+              <th>Prefix Name</th>
+              <th>Prefix Description</th>
+              <th>ASN</th>
+              <th>ASN Country</th>
+              <th>ASN Name</th>
+              <th>ASN Description</th>
+            </thead>
+            <tbody>
+              {% for prefix in results.info.prefixes %}
+                <tr>
+                  <td>{{ prefix.prefix }}</td>
+                  <td>{{ prefix.country_code }}</td>
+                  <td>{{ prefix.name }}</td>
+                  <td>{{ prefix.description }}</td>
+                  <td>AS{{ prefix.asn.asn }}</td>
+                  <td>{{ prefix.asn.country_code }}</td>
+                  <td>{{ prefix.asn.name }}</td>
+                  <td>{{ prefix.asn.description }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
       {% endif %}
     </div>
   </div>

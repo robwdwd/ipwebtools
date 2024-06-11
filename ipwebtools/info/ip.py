@@ -68,8 +68,6 @@ async def get_ip_info(ip_address: IPAddress) -> dict:
 
     bgpview_data = await get_bgpview_ip_info(str(ip_address))
 
-    pp.pprint(bgpview_data)
-
     if bgpview_data:
         ipdata["ptr_record"] = bgpview_data["ptr_record"]
         ipdata["prefixes"] = bgpview_data["prefixes"]

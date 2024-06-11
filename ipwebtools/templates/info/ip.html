@@ -51,101 +51,147 @@
     </div>
     <div class="column">
       {% if results %}
-        <table class="table is-hoverable is-fullwidth is-bordered">
-          <tbody>
-            <tr>
-              <th>IP Address</th>
-              <td>{{ results.ipaddress }}</td>
-            </tr>
-            <tr>
-              <th>IP Version</th>
-              <td>IPv{{ results.version }}</td>
-            </tr>
-            {% if results.info %}
+        <nav class="level mb-6">
+          {% if results.info and results.info.country and results.info.country.code and results.info.country.name %}
+            <div class="level-left">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="title">
+                    <span class="fi fi-{{ results.info.country.code|lower }}"></span></p>
+                </div>
+              </div>
+            </div>
 
-              {% if results.info.ptr_record %}
-                <tr>
-                  <th>Reverse DNS</th>
-                  <td>{{ results.info.ptr_record }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.org %}
-                <tr>
-                  <th>Organisation</th>
-                  <td>{{ results.info.org }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.network %}
-                <tr>
-                  <th>Subnet</th>
-                  <td>{{ results.info.network }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.rir %}
-                {% if results.info.rir.name %}
-                  <tr>
-                    <th>RIR</th>
-                    <td>{{ results.info.rir.name }}</td>
-                  </tr>
-                {% endif %}
-                {% if results.info.rir.allocation_status %}
-                  <tr>
-                    <th>Status</th>
-                    <td>{{ results.info.rir.allocation_status }}</td>
-                  </tr>
-                {% endif %}
-                {% if results.info.rir.date_allocated %}
-                  <tr>
-                    <th>Date Allocated</th>
-                    <td>{{ results.info.rir.date_allocated }}</td>
-                  </tr>
-                {% endif %}
-              {% endif %}
-              {% if results.info.continent %}
-                <tr>
-                  <th>Continent</th>
-                  <td>{{ results.info.continent.name }}
-                    ({{ results.info.continent.code }})</td>
-                </tr>
-              {% endif %}
-              {% if results.info.country %}
-                <tr>
-                  <th>Country</th>
-                  <td>{{ results.info.country.name }}
-                    ({{ results.info.country.code }})</td>
-                </tr>
-              {% endif %}
-              {% if results.info.region %}
-                <tr>
-                  <th>Region</th>
-                  <td>{{ results.info.region }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.city %}
-                <tr>
-                  <th>City</th>
-                  <td>{{ results.info.city }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.timezone %}
-                <tr>
-                  <th>Timezone</th>
-                  <td>{{ results.info.timezone }}</td>
-                </tr>
-              {% endif %}
-              {% if results.info.location %}
-                <tr>
-                  <th>Latitude / Longitude</th>
-                  <td>{{ results.info.location.latitude }}
-                    /
-                    {{ results.info.location.longitude }}</td>
-                </tr>
-              {% endif %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Country</p>
+                <p class="title is-4">{{ results.info.country.name }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">IP Address</p>
+              <p class="title is-4">{{ results.ipaddress }}</p>
+            </div>
+          </div>
+
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">IP Version</p>
+              <p class="title is-4">IPv{{ results.version }}</p>
+            </div>
+          </div>
+
+          {% if results.info and results.info.description_short %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Name</p>
+                <p class="title is-4">{{ results.info.name }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if results.info.rir and results.info.rir.rir_name %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">RIR</p>
+                <p class="title is-4">{{ results.info.rir.rir_name }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+        </nav>
+
+        <div class="columns mb-4">
+          {% if results.info %}
+            <div class="column">
+              <table class="table is-fullwidth">
+                <tbody>
+                  {% if results.info.org %}
+                    <tr>
+                      <th>Organisation</th>
+                      <td>{{ results.info.org }}</td>
+                    </tr>
+                  {% endif %}
+                  {% if results.info.ptr_record %}
+                    <tr>
+                      <th>Reverse DNS</th>
+                      <td>{{ results.info.ptr_record }}</td>
+                    </tr>
+                  {% endif %}
+                  {% if results.info.network %}
+                    <tr>
+                      <th>Network</th>
+                      <td>{{ results.info.network }}</td>
+                    </tr>
+                  {% endif %}
+                  {% if results.info.rir %}
+                    {% if results.info.rir.allocation_status %}
+                      <tr>
+                        <th>Status</th>
+                        <td>{{ results.info.rir.allocation_status|capitalize }}</td>
+                      </tr>
+                    {% endif %}
+                    {% if results.info.rir.date_allocated %}
+                      <tr>
+                        <th>Date Allocated</th>
+                        <td>{{ results.info.rir.date_allocated }}</td>
+                      </tr>
+                    {% endif %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+            {% if results.info.country and results.info.country.code and results.info.country.name %}
+              <div class="column">
+                <table class="table is-fullwidth">
+                  <tbody>
+                    {% if results.info.continent %}
+                      <tr>
+                        <th>Continent</th>
+                        <td>{{ results.info.continent.name }}
+                          ({{ results.info.continent.code }})</td>
+                      </tr>
+                    {% endif %}
+                    {% if results.info.region %}
+                      <tr>
+                        <th>Region</th>
+                        <td>{{ results.info.region }}</td>
+                      </tr>
+                    {% endif %}
+                    {% if results.info.city %}
+                      <tr>
+                        <th>City</th>
+                        <td>{{ results.info.city }}</td>
+                      </tr>
+                    {% endif %}
+                    {% if results.info.timezone %}
+                      <tr>
+                        <th>Timezone</th>
+                        <td>{{ results.info.timezone }}</td>
+                      </tr>
+                    {% endif %}
+                    {% if results.info.location %}
+                      <tr>
+                        <th>Coordinates</th>
+                        <td>{{ results.info.location.latitude }}
+                          /
+                          {{ results.info.location.longitude }}
+                        </td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
             {% endif %}
-          </tbody>
-        </table>
+          {% endif %}
+        </div>
+
         {% if results.info.prefixes %}
-          <table class="table is-hoverable is-fullwidth is-bordered">
+          <h5 class="title is-5">Matching Prefixes</h5>
+          <table class="table is-hoverable is-fullwidth is-bordered is-striped is-narrow">
             <thead>
               <th>Prefix</th>
               <th>Country</th>
@@ -160,11 +206,13 @@
               {% for prefix in results.info.prefixes %}
                 <tr>
                   <td>{{ prefix.prefix }}</td>
-                  <td>{{ prefix.country_code }}</td>
+                  <td>
+                    <span class="fi fi-{{ prefix.country_code|lower }}"></span></td>
                   <td>{{ prefix.name }}</td>
                   <td>{{ prefix.description }}</td>
                   <td>AS{{ prefix.asn.asn }}</td>
-                  <td>{{ prefix.asn.country_code }}</td>
+                  <td>
+                    <span class="fi fi-{{ prefix.asn.country_code|lower }}"></span></td>
                   <td>{{ prefix.asn.name }}</td>
                   <td>{{ prefix.asn.description }}</td>
                 </tr>

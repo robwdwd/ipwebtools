@@ -9,6 +9,7 @@
 from netaddr import AddrFormatError, IPAddress, IPNetwork
 from starlette_wtf import csrf_protect
 
+from ipwebtools.bgpview import get_bgpview_prefix_info
 from ipwebtools.forms import CidrInfoForm
 from ipwebtools.templates import templates
 
@@ -50,6 +51,8 @@ async def cidr_info(request):
 
             # If IP input is not on bitmask boundry 10.1.1.1/24
             results["cidr"] = cidr.cidr
+
+            results['info'] = await get_bgpview_prefix_info(str(cidr.cidr))
 
             # General info
             results["version"] = cidr.version

@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  ASN Info
+{% endblock %}
+
+{% block content %}
+  <div class="columns is-tablet">
+    <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
+      <div class="card">
+        <header class="card-header">
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fa-solid fa-table-list"></i></span></button>
+          <p class="card-header-title">ASN Info</p>
+        </header>
+        <div class="card-content">
+          <p class="subtitle is-7">Get information about an ASN.</p>
+          <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="field">
+              {{ form.asn.label(class = 'label') }}
+              <div class="control is-expanded has-icons-left">
+                {% if form.asn.errors %}
+                  {{ form.asn(class = 'input is-danger') }}
+                {% else %}
+                  {{ form.asn(class = 'input') }}
+                {% endif %}
+                <span class="icon is-small is-left">
+                  <i class="fa-solid fa-server"></i>
+                </span>
+              </div>
+              {% if form.asn.errors %}
+                <p class="help is-danger">
+                  {% for error in form.asn.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </p>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button class="button is-dark">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      {% if results %}
+
+        <nav class="level mb-6">
+          {% if results.country_code %}
+            <div class="level-left">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="title">
+                    <span class="fi fi-{{ results.country_code|lower }}"></span></p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">ASN</p>
+              <p class="title is-4">{{ results.asn }}</p>
+            </div>
+          </div>
+
+          {% if results.name %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Name</p>
+                <p class="title is-4">{{ results.name }}</p>
+              </div>
+            </div>
+          {% endif %}
+          {% if results.rir_allocation and results.rir_allocation.rir_name%}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">RIR</p>
+                <p class="title is-4">{{ results.rir_allocation.rir_name }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </nav>
+
+        <div class="columns mb-4">
+
+          <div class="column">
+            <table class="table is-fullwidth">
+              <tbody>
+                {% if results.description_short %}
+                  <tr>
+                    <th>Description</th>
+                    <td>{{ results.description_short }}</td>
+                  </tr>
+                {% endif %}
+                {% if results.rir_allocation %}
+                  {% if results.rir_allocation.allocation_status %}
+                    <tr>
+                      <th>Status</th>
+                      <td>{{ results.rir_allocation.allocation_status|capitalize }}</td>
+                    </tr>
+                  {% endif %}
+                  {% if results.rir_allocation.date_allocated %}
+                    <tr>
+                      <th>Date Allocated</th>
+                      <td>{{ results.rir_allocation.date_allocated }}</td>
+                    </tr>
+                  {% endif %}
+                {% endif %}
+                {% if results.date_updated %}
+                  <tr>
+                    <th>Date Updated</th>
+                    <td>{{ results.date_updated }}</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="column">
+            <table class="table is-fullwidth">
+              <tbody>
+                {% if results.website %}
+                  <tr>
+                    <th>Website</th>
+                    <td>
+                      <a href="{{ results.website }}" target="_BLANK">{{ results.website }}</a>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if results.looking_glass %}
+                  <tr>
+                    <th>Looking Glass</th>
+                    <td>
+                      <a href="{{ results.looking_glass }}" target="_BLANK">{{ results.looking_glass }}</a>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if results.traffic_estimation %}
+                  <tr>
+                    <th>Traffic Estimation</th>
+                    <td>{{ results.traffic_estimation }}</td>
+                  </tr>
+                {% endif %}
+                {% if results.traffic_ratio %}
+                  <tr>
+                    <th>Traffic Ratio</th>
+                    <td>{{ results.traffic_ratio }}</td>
+                  </tr>
+                {% endif %}
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        {% if results.description_full %}
+          <div class="columns mb-4">
+            <div class="column">
+              <h5 class="title is-5">Full Description</h5>
+              <p class="is-size-6">
+                {% for description in results.description_full %}
+                  {{ description }}<br/>
+                {% endfor %}
+              </p>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="columns mb-4">
+
+          {% if results.owner_address %}
+            <div class="column">
+              <h5 class="title is-5">Address</h5>
+              <p class="is-size-6">
+                {% for address_line in results.owner_address %}
+                  {{ address_line }}<br/>
+                {% endfor %}
+              </p>
+            </div>
+          {% endif %}
+
+          {% if results.email_contacts %}
+            <div class="column">
+              <h5 class="title is-5">Email Contacts</h5>
+              <p class="is-size-6">
+                {% for contact in results.email_contacts %}
+                  {{ contact }}<br/>
+                {% endfor %}
+              </p>
+            </div>
+          {% endif %}
+
+          {% if results.abuse_contacts %}
+            <div class="column">
+              <h5 class="title is-5">Abuse Contacts</h5>
+              <p class="is-size-6">
+                {% for contact in results.abuse_contacts %}
+                  {{ contact }}<br/>
+                {% endfor %}
+              </p>
+            </div>
+          {% endif %}
+
+        </div>
+
+        {% if results.ixs %}
+          <h5 class="title is-5">Exchange Points</h5>
+          <table class="table is-hoverable is-fullwidth is-bordered is-striped is-narrow">
+            <thead>
+              <th>Country</th>
+              <th>Name</th>
+              <th>City</th>
+              <th>IPv4 Address</th>
+              <th>IPv6 Address</th>
+              <th>Speed</th>
+            </thead>
+            <tbody>
+              {% for ix in results.ixs %}
+                <tr>
+                  <td>
+                    <span class="fi fi-{{ ix.country_code|lower }}"></span>
+                  </td>
+                  <td>{{ ix.name }}</td>
+                  <td>{{ ix.city }}</td>
+                  <td>{{ ix.ipv4_address }}</td>
+                  <td>{{ ix.ipv6_address }}</td>
+
+                  
+                  <td>{{ ix.speed }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

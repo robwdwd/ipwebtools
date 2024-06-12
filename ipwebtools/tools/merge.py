@@ -4,7 +4,7 @@
 # "BSD 2-Clause License". Please see the LICENSE file that should
 # have been included as part of this distribution.
 #
-"""CIDR Merge Page."""
+"""Network Prefix Merge Page."""
 import re
 
 from netaddr import AddrFormatError, IPGlob, IPNetwork, IPRange, IPSet
@@ -87,7 +87,7 @@ def parse_networks(form_field):
 
 @csrf_protect
 async def merge(request):
-    """Cidr merge tool page entry point."""
+    """Network prefix merge tool page entry point."""
     results = {}
 
     form = await CidrMergeForm.from_formdata(request)
@@ -106,4 +106,4 @@ async def merge(request):
             results["cidrs"] = ipset_to_cidr_list(new_cidrs)
             results["ranges"] = ipset_to_range_list(new_cidrs)
 
-    return templates.TemplateResponse("cidr/merge.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("tools/merge.html", {"request": request, "results": results, "form": form})

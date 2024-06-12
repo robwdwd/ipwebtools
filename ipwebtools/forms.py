@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired, NumberRange
 
 
 class CidrMergeForm(StarletteForm):
-    """Form for CIDR Merge Page."""
+    """Form for IP Prefix Merge Page."""
 
     networks = TextAreaField("IP Networks", validators=[DataRequired()])
     excluded = TextAreaField("Excluded Networks")
@@ -19,17 +19,17 @@ class CidrMergeForm(StarletteForm):
 
 
 class CidrSplitForm(StarletteForm):
-    """Form for CIDR Split Page."""
+    """Form for IP Prefix Split Page."""
 
-    network = StringField("IP CIDR", validators=[DataRequired()])
+    network = StringField("IP Prefix", validators=[DataRequired()])
     mask = IntegerField("Split Prefix Length", validators=[DataRequired(), NumberRange(min=1, max=128)])
     submit = SubmitField("Submit")
 
 
-class CidrInfoForm(StarletteForm):
-    """Form for CIDR Info Page."""
+class PrefixInfoForm(StarletteForm):
+    """Form for IP Prefix Info Page."""
 
-    network = StringField("IP CIDR", validators=[DataRequired()])
+    network = StringField("IP Prefix", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
@@ -37,4 +37,11 @@ class IPInfoForm(StarletteForm):
     """Form for IP Info Page."""
 
     ipaddress = StringField("IP Address", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+class ASNInfoForm(StarletteForm):
+    """Form for ASN Info Page."""
+
+    asn = IntegerField("ASN", validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField("Submit")

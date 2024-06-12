@@ -234,6 +234,17 @@ files = [
 ]
 
 [[package]]
+name = "chardet"
+version = "5.2.0"
+description = "Universal encoding detector for Python 3"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "chardet-5.2.0-py3-none-any.whl", hash = "sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970"},
+    {file = "chardet-5.2.0.tar.gz", hash = "sha256:1b3b6ff479a8c414bc3fa2c0852995695c4a026dcd6d0633b2dd092ca39c1cf7"},
+]
+
+[[package]]
 name = "charset-normalizer"
 version = "3.3.2"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
@@ -634,6 +645,23 @@ http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
 
 [[package]]
+name = "humanreadable"
+version = "0.4.0"
+description = "humanreadable is a Python library to convert human-readable values to other units."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "humanreadable-0.4.0-py3-none-any.whl", hash = "sha256:5b70257a8e88856f9b64a1f0a6fb7535c9002818465e298ca27d745b25e5675d"},
+    {file = "humanreadable-0.4.0.tar.gz", hash = "sha256:2879a146f0602512addfcfba227956a3f1d23b99e9f938ff91b2085a170519ba"},
+]
+
+[package.dependencies]
+typepy = ">=1.2.0,<2"
+
+[package.extras]
+test = ["pytest", "pytest-md-report (>=0.3)"]
+
+[[package]]
 name = "idna"
 version = "3.7"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -843,6 +871,23 @@ files = [
     {file = "maxminddb-2.6.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:5662386db91872d5505fde9e7bb0b9530b6aab7a6f3ece7df59a2b43a7b45d17"},
     {file = "maxminddb-2.6.2.tar.gz", hash = "sha256:7d842d32e2620abc894b7d79a5a1007a69df2c6cf279a06b94c9c3913f66f264"},
 ]
+
+[[package]]
+name = "mbstrdecoder"
+version = "1.1.3"
+description = "mbstrdecoder is a Python library for multi-byte character string decoder"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mbstrdecoder-1.1.3-py3-none-any.whl", hash = "sha256:d66c1ed3f2dc4e7c5d87cd44a75be10bc5af4250f95b38bbaedd7851308ce938"},
+    {file = "mbstrdecoder-1.1.3.tar.gz", hash = "sha256:dcfd2c759322eb44fe193a9e0b1b86c5b87f3ec5ea8e1bb43b3e9ae423f1e8fe"},
+]
+
+[package.dependencies]
+chardet = ">=3.0.4,<6"
+
+[package.extras]
+test = ["Faker (>=1.0.2)", "pytest (>=6.0.1)", "pytest-md-report (>=0.1)"]
 
 [[package]]
 name = "mccabe"
@@ -1327,6 +1372,24 @@ files = [
 ]
 
 [[package]]
+name = "typepy"
+version = "1.3.2"
+description = "typepy is a Python library for variable type checker/validator/converter at a run time."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "typepy-1.3.2-py3-none-any.whl", hash = "sha256:d5d1022a424132622993800f1d2cd16cfdb691ac4e3b9c325f0fcb37799db1ae"},
+    {file = "typepy-1.3.2.tar.gz", hash = "sha256:b69fd48b9f50cdb3809906eef36b855b3134ff66c8893a4f8580abddb0b39517"},
+]
+
+[package.dependencies]
+mbstrdecoder = ">=1.0.0,<2"
+
+[package.extras]
+datetime = ["packaging", "python-dateutil (>=2.8.0,<3.0.0)", "pytz (>=2018.9)"]
+test = ["packaging", "pytest (>=6.0.1)", "python-dateutil (>=2.8.0,<3.0.0)", "pytz (>=2018.9)", "tcolorpy"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1715,4 +1778,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "30a8cfb232ecc536f75465c623613d4e1bc42d71f13604f36554a850a1d19262"
+content-hash = "369c6778d83cbdc6fbee11f4a77bd0ee647dd24a87d81078cce0b8c9947e13db"

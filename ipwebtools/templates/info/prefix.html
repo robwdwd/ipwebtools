@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  CIDR Info
+  IP Prefix Info
 {% endblock %}
 
 {% block content %}
@@ -12,10 +12,10 @@
           <button class="card-header-icon" aria-label="more options">
             <span class="icon">
               <i class="fa-solid fa-table-list"></i></span></button>
-          <p class="card-header-title">CIDR Info</p>
+          <p class="card-header-title">IP Prefix Info</p>
         </header>
         <div class="card-content">
-          <p class="subtitle is-7">Get information about a CIDR prefix.</p>
+          <p class="subtitle is-7">Get information about an IP prefix.</p>
           <form method="post">
             {{ form.csrf_token }}
 
@@ -78,7 +78,7 @@
             </div>
           </div>
 
-          {% if results.info and results.info.description_short %}
+          {% if results.info and results.info.name %}
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Name</p>

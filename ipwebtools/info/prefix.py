@@ -4,13 +4,13 @@
 # "BSD 2-Clause License". Please see the LICENSE file that should
 # have been included as part of this distribution.
 #
-"""CIDR Info Page."""
+"""Prefix Info Page."""
 
 from netaddr import AddrFormatError, IPAddress, IPNetwork
 from starlette_wtf import csrf_protect
 
 from ipwebtools.bgpview import get_bgpview_prefix_info
-from ipwebtools.forms import CidrInfoForm
+from ipwebtools.forms import PrefixInfoForm
 from ipwebtools.templates import templates
 
 
@@ -39,11 +39,11 @@ def get_useable(network):
 
 
 @csrf_protect
-async def cidr_info(request):
-    """Cidr info tool page entry point."""
+async def prefix_info(request):
+    """Prefix info tool page entry point."""
     results = {}
 
-    form = await CidrInfoForm.from_formdata(request)
+    form = await PrefixInfoForm.from_formdata(request)
 
     if await form.validate_on_submit():
         try:
@@ -70,4 +70,4 @@ async def cidr_info(request):
         except AddrFormatError as error:
             form.network.errors.append(error)
 
-    return templates.TemplateResponse("cidr/info.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("info/prefix.html", {"request": request, "results": results, "form": form})

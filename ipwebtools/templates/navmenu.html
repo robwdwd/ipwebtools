@@ -16,17 +16,18 @@
       <a class="navbar-item" href="{{ url_for('home') }}">Home</a>
 
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">CIDR</a>
+        <a class="navbar-link">Tools</a>
         <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" href="{{ url_for('cidr_info') }}">Information</a>
-          <a class="navbar-item" href="{{ url_for('cidr_merge') }}">Merge</a>
-          <a class="navbar-item" href="{{ url_for('cidr_split') }}">Split</a>
+          <a class="navbar-item" href="{{ url_for('cidr_merge') }}">IP Prefix Merge</a>
+          <a class="navbar-item" href="{{ url_for('cidr_split') }}">IP Prefix Split</a>
         </div>
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">IP</a>
+        <a class="navbar-link">Information</a>
         <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" href="{{ url_for('ip_info') }}">Information</a>
+          <a class="navbar-item" href="{{ url_for('asn_info') }}">ASN</a>
+          <a class="navbar-item" href="{{ url_for('ip_info') }}">IP Address</a>
+          <a class="navbar-item" href="{{ url_for('prefix_info') }}">IP Prefix</a>
         </div>
       </div>
     </div>

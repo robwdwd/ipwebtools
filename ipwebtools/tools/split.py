@@ -4,7 +4,7 @@
 # "BSD 2-Clause License". Please see the LICENSE file that should
 # have been included as part of this distribution.
 #
-"""CIDR Split Page."""
+"""Network prefix split page."""
 
 from netaddr import AddrFormatError, IPNetwork
 from starlette_wtf import csrf_protect
@@ -44,7 +44,7 @@ def validate_split_fields(form):
 
 @csrf_protect
 async def split(request):
-    """Cidr split tool page entry point."""
+    """Network prefix split tool page entry point."""
     results = None
 
     form = await CidrSplitForm.from_formdata(request)
@@ -52,4 +52,4 @@ async def split(request):
     if await form.validate_on_submit():
         results = validate_split_fields(form)
 
-    return templates.TemplateResponse("cidr/split.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("tools/split.html", {"request": request, "results": results, "form": form})

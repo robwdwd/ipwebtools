@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  CIDR Split
+  Network Prefix Split Tool
 {% endblock %}
 
 {% block content %}
@@ -9,11 +9,13 @@
     <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
       <div class="card">
         <header class="card-header">
-          <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
-          <p class="card-header-title">CIDR Split</p>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fa-solid fa-table-list"></i></span></button>
+          <p class="card-header-title">Prefix Split</p>
         </header>
         <div class="card-content">
-          <p class="subtitle is-7">Split a CIDR prefix into smaller subnets.</p>
+          <p class="subtitle is-7">Split a network prefix into smaller subnets.</p>
           <form method="post">
             {{ form.csrf_token }}
 
@@ -25,7 +27,9 @@
                 {% else %}
                   {{ form.network(class = 'input') }}
                 {% endif %}
-                <span class="icon is-small is-left"><i class="fa-solid fa-server"></i></span>
+                <span class="icon is-small is-left">
+                  <i class="fa-solid fa-server"></i>
+                </span>
               </div>
               {% if form.network.errors %}
                 <p class="help is-danger">
@@ -44,7 +48,9 @@
                 {% else %}
                   {{ form.mask(class = 'input') }}
                 {% endif %}
-                <span class="icon is-small is-left"><i class="fa-solid fa-slash fa-rotate-270"></i></span>
+                <span class="icon is-small is-left">
+                  <i class="fa-solid fa-slash fa-rotate-270"></i>
+                </span>
               </div>
               {% if form.mask.errors %}
                 <p class="help is-danger">
@@ -69,7 +75,9 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">Results</p>
-            <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_output"><span class="icon"><i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+            <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_output">
+              <span class="icon">
+                <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
           </header>
           <div class="card-content">
             <div class="content">

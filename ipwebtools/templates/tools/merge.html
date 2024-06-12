@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  CIDR Merge
+  IP Prefix Merge tool
 {% endblock %}
 
 {% block content %}
@@ -9,14 +9,16 @@
     <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
       <div class="card">
         <header class="card-header">
-          <button class="card-header-icon" aria-label="more options"><span class="icon"><i class="fa-solid fa-table-list"></i></span></button>
-          <p class="card-header-title">CIDR Merge</p>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fa-solid fa-table-list"></i></span></button>
+          <p class="card-header-title">IP Prefix Merge</p>
         </header>
         <div class="card-content">
           <p class="subtitle is-7">
             Generate and consolidate
             <strong>the shortest possible representation</strong>
-            of a list the IP addresses, CIDRs or IP ranges and optionally exclude some IP addresses, CIDRs or IP ranges from the list.
+            of a list the IP addresses, IP prefixes or IP ranges and optionally exclude some IP addresses, IP prefixes or IP ranges from the list.
           </p>
           <form method="post">
             {{ form.csrf_token }}
@@ -74,7 +76,7 @@
               <div class="content is-small">
                 <ul>
                   <li>
-                    CIDR Blocks<ul>
+                    IP Prefixes<ul>
                       <li>192.168.0.0/24</li>
                       <li>172.16.0.129/27 - Works out correct boundry (i.e .128 here.)</li>
                       <li>8.8.8.8/32 - Accepts host addresses in CIDR format.</li>
@@ -118,12 +120,14 @@
       </article>
 
       {% if results %}
-        <div class="tile is-ancestor">
-          <div class="tile is-parent">
-            <div class="tile is-child card">
+        <div class="grid">
+          <div class="cell">
+            <div class="card">
               <header class="card-header">
-                <p class="card-header-title">CIDR Results</p>
-                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_cidrs"><span class="icon"><i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+                <p class="card-header-title">IP Prefix Results</p>
+                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_cidrs">
+                  <span class="icon">
+                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
               </header>
               <div class="card-content">
                 <div class="content">
@@ -134,11 +138,13 @@
               </div>
             </div>
           </div>
-          <div class="tile is-parent">
-            <div class="tile is-child card">
+          <div class="cell">
+            <div class="card">
               <header class="card-header">
-                <p class="card-header-title">Range Results</p>
-                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_ranges"><span class="icon"><i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+                <p class="card-header-title">IP Range Results</p>
+                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_ranges">
+                  <span class="icon">
+                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
               </header>
               <div class="card-content">
                 <div class="content">

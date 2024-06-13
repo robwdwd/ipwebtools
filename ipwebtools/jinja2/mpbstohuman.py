@@ -11,6 +11,17 @@ from typing import Union
 
 
 def format_megabits_per_second(mbps: int, precision: Union[int, None] = None) -> str:
+    """
+    Formats a given speed in Megabits per second to a human-readable string with appropriate units.
+
+    Args:
+        mbps (int): The speed in Megabits per second to format.
+        precision (Union[int, None], optional): The number of decimal places to round to. Defaults to None.
+
+    Returns:
+        str: The formatted speed with the appropriate unit (Mbps, Gbps, Tbps, or Pbps).
+    """
+
     units = [" Mbps", " Gbps", " Tbps", " Pbps"]
     exp = int(math.floor(math.log(mbps, 1000)))
 

@@ -7,6 +7,7 @@
 """ASN Info Page."""
 
 
+from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
 from ipwebtools.bgpview import get_bgpview_asn_info, get_bgpview_asn_ix_info
@@ -15,7 +16,7 @@ from ipwebtools.templates import templates
 
 
 @csrf_protect
-async def asn_info(request):
+async def asn_info(request: Request):
     """ASN info tool page entry point."""
     results = {}
 

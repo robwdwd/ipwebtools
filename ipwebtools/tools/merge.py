@@ -8,6 +8,7 @@
 import re
 
 from netaddr import AddrFormatError, IPGlob, IPNetwork, IPRange, IPSet
+from starlette.requests import Request
 from starlette_wtf import csrf_protect
 from wtforms import TextAreaField
 
@@ -24,11 +25,7 @@ def ipset_to_cidr_list(ip_set_from: IPSet) -> list:
     Returns:
         list: List of IP CIDRs
     """
-    to_list = []
-    for cidr in ip_set_from.iter_cidrs():
-        to_list.append(str(cidr))
-
-    return to_list
+    return [str(cidr) for cidr in ip_set_from.iter_cidrs()]
 
 
 def ipset_to_range_list(ip_set_from: IPSet) -> list:
@@ -40,11 +37,8 @@ def ipset_to_range_list(ip_set_from: IPSet) -> list:
     Returns:
         list: List of IP Ranges
     """
-    to_list = []
-    for ip_range in ip_set_from.iter_ipranges():
-        to_list.append(str(ip_range))
+    return [str(ip_range) for ip_range in ip_set_from.iter_ipranges()]
 
-    return to_list
 
 
 def parse_networks(form_field: TextAreaField) -> IPSet:
@@ -87,7 +81,7 @@ def parse_networks(form_field: TextAreaField) -> IPSet:
 
 
 @csrf_protect
-async def merge(request):
+async def merge(request: Request):
     """Network prefix merge tool page entry point."""
     results = {}
 

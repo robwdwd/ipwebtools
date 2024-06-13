@@ -13,6 +13,14 @@ from humanize import naturaldate
 
 
 def string_to_date(date: str) -> Union[str, None]:
+    """
+    Converts a string representation of a date to a more natural date format.
 
-    return naturaldate(datetime.strptime(date, '%Y-%m-%d %H:%M:%S'))
+    Args:
+        date (str): The string representing the date in the format '%Y-%m-%d %H:%M:%S'.
 
+    Returns:
+        Union[str, None]: The natural language representation of the input date, or None if the conversion fails.
+    """
+
+    return naturaldate(datetime.strptime(date, "%Y-%m-%d %H:%M:%S"))

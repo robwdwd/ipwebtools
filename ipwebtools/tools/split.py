@@ -7,6 +7,7 @@
 """Network prefix split page."""
 
 from netaddr import AddrFormatError, IPNetwork
+from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
 from ipwebtools.forms import CidrSplitForm
@@ -25,16 +26,14 @@ def validate_split_fields(form: CidrSplitForm):
     to_prefix_len = int(form.mask.data)
 
     try:
-        cidr_str = str(form.network.data)
-        cidr = IPNetwork(cidr_str.strip())
+        cidr = IPNetwork(str(form.network.data).strip())
 
-        if cidr.version == 4:
-            if to_prefix_len > 32:
-                form.mask.errors.append("Invalid prefix length for IPv4 CIDR.")
-                return
+        if cidr.version == 4 and to_prefix_len > 32:
+            form.mask.errors.append("Invalid prefix length for IPv4 prefix.")
+            return
 
         if cidr.prefixlen >= to_prefix_len:
-            form.mask.errors.append("Split prefix length must be bigger than CIDR prefix length.")
+            form.mask.errors.append("Split prefix length must be bigger than IP prefix length.")
             return
 
         return cidr.subnet(to_prefix_len)
@@ -45,7 +44,7 @@ def validate_split_fields(form: CidrSplitForm):
 
 
 @csrf_protect
-async def split(request):
+async def split(request: Request):
     """Network prefix split tool page entry point."""
     results = None
 

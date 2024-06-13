@@ -7,35 +7,17 @@
 """IP Info Page."""
 
 
-from typing import Union
-
 from geoip2.errors import GeoIP2Error
-from geoip2.models import City
 from geoip2.records import Subdivision
 from geoip2.webservice import AsyncClient
 from netaddr import AddrFormatError, IPAddress
+from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
 from ipwebtools.bgpview import get_bgpview_ip_info
 from ipwebtools.forms import IPInfoForm
 from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
 from ipwebtools.templates import templates
-
-
-async def get_geoip(ip_addr: IPAddress) -> Union[City, None]:
-    """Get IP Location/GeoIP data.
-
-    Args:
-        ip_addr (IPAddress): IP Address to find location data from
-
-    Returns:
-        dict: IP Location/GeoIP data
-    """
-    async with AsyncClient(int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST) as client:
-        try:
-            return await client.city(str(ip_addr))
-        except GeoIP2Error:
-            return
 
 
 def format_subdiv(subdiv: Subdivision) -> str:
@@ -47,50 +29,62 @@ def format_subdiv(subdiv: Subdivision) -> str:
     Returns:
         str: formated subdivision
     """
-    if subdiv.name:
-        return f"{subdiv.name} ({subdiv.iso_code})"
-    else:
-        return ""
+    return f"{subdiv.name} ({subdiv.iso_code})" if subdiv.name else ""
 
 
-async def get_ip_info(ip_address: IPAddress) -> dict:
+async def get_geoip(ip_addr: str) -> dict:
+    """Get IP Location/GeoIP data.
+
+    Args:
+        ip_addr (str): IP Address to find location data from
+
+    Returns:
+        City: IP Location/GeoIP data
+    """
+    async with AsyncClient(int(str(GEOIP_USER_ID)), str(GEOIP_API_KEY), host=GEOIP_HOST) as client:
+
+        try:
+            geoip_data = await client.city(ip_addr)
+
+            return {
+                "continent": {"name": geoip_data.continent.name, "code": geoip_data.continent.code},
+                "country": {"name": geoip_data.country.name, "code": geoip_data.country.iso_code},
+                "city": geoip_data.city.name,
+                "org": geoip_data.traits.autonomous_system_organization,
+                "network": geoip_data.traits.network,
+                "timezone": geoip_data.location.time_zone,
+                "location": {"latitude": geoip_data.location.latitude, "longitude": geoip_data.location.longitude},
+                "region": ", ".join(map(format_subdiv, geoip_data.subdivisions)) if geoip_data.subdivisions else None,
+            }
+        except GeoIP2Error:
+            return {}
+
+
+async def get_ip_info(ip_address: str) -> dict:
     """Get IP Info.
 
     Args:
-        ip_addr (IPAddress): IP Address to find IP information data from.
+        ip_addr (str): IP Address to find IP information data from.
 
     Returns:
         dict: IP Information
     """
     ipdata = {}
 
-    bgpview_data = await get_bgpview_ip_info(str(ip_address))
+    bgpview_data = await get_bgpview_ip_info(ip_address)
 
     if bgpview_data:
-        ipdata["ptr_record"] = bgpview_data["ptr_record"]
-        ipdata["prefixes"] = bgpview_data["prefixes"]
-        ipdata["rir"] = bgpview_data["rir_allocation"]
+        ipdata |= {"ptr_record": bgpview_data["ptr_record"], "prefixes": bgpview_data["prefixes"], "rir": bgpview_data["rir_allocation"]}
 
-    # Get Data from Maxmind
+    # Get Data from Maxmind and merge it with our data.
     if GEOIP_ENABLED:
-        geoip_data = await get_geoip(ip_address)
-        if geoip_data:
-            ipdata["continent"] = {"name": geoip_data.continent.name, "code": geoip_data.continent.code}
-            ipdata["country"] = {"name": geoip_data.country.name, "code": geoip_data.country.iso_code}
-            ipdata["city"] = geoip_data.city.name
-            ipdata["org"] = geoip_data.traits.autonomous_system_organization
-            ipdata["network"] = geoip_data.traits.network
-            ipdata["timezone"] = geoip_data.location.time_zone
-            ipdata["location"] = {"latitude": geoip_data.location.latitude, "longitude": geoip_data.location.longitude}
-
-            if geoip_data.subdivisions:
-                ipdata["region"] = ", ".join(map(format_subdiv, geoip_data.subdivisions))
+        ipdata |= await get_geoip(ip_address)
 
     return ipdata
 
 
 @csrf_protect
-async def ip_info(request):
+async def ip_info(request: Request):
     """IP info tool page entry point."""
     results = {}
 
@@ -98,15 +92,9 @@ async def ip_info(request):
 
     if await form.validate_on_submit():
         try:
-            ip_str = str(form.ipaddress.data)
-            ipaddress = IPAddress(ip_str.strip())
-
-            results["ipaddress"] = str(ipaddress)
-
-            # General info
-            results["version"] = ipaddress.version
-
-            results["info"] = await get_ip_info(ipaddress)
+            ipaddress = IPAddress(str(form.ipaddress.data).strip())
+            ip_str = str(ipaddress)
+            results = {"ipaddress": ip_str, "version": ipaddress.version, "info": await get_ip_info(ip_str)}
 
         except (AddrFormatError, ValueError):
             form.ipaddress.errors.append(f"{form.ipaddress.data} is not a valid IP Address.")

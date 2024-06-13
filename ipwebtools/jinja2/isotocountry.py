@@ -6,12 +6,20 @@
 #
 """Convert kbps into human readable format."""
 
-from typing import Union
+
 
 import pycountry
 
 
-def iso_code_to_country(country_code: str) -> Union[str, None]:
+def iso_code_to_country(country_code: str) -> str:
+    """
+    Converts an ISO country code to the corresponding country name.
 
+    Args:
+        country_code (str): The ISO country code to convert to a country name.
+
+    Returns:
+        str: The name of the country corresponding to the given ISO country code, or "Unknown" if the country code is not found.
+    """
     country = pycountry.countries.get(alpha_2=country_code.upper())
     return "Unknown" if country is None else country.name

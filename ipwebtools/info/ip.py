@@ -29,7 +29,7 @@ def format_subdiv(subdiv: Subdivision) -> str:
     Returns:
         str: formated subdivision
     """
-    return f"{subdiv.name} ({subdiv.iso_code})" if subdiv.name else ""
+    return f"{subdiv.name}" if subdiv.name else ""
 
 
 async def get_geoip(ip_addr: str) -> dict:

@@ -6,7 +6,7 @@
 #
 """IP Info Page."""
 
-import pprint
+
 from typing import Union
 
 from geoip2.errors import GeoIP2Error
@@ -20,8 +20,6 @@ from ipwebtools.bgpview import get_bgpview_ip_info
 from ipwebtools.forms import IPInfoForm
 from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
 from ipwebtools.templates import templates
-
-pp = pprint.PrettyPrinter(indent=2, width=120)
 
 
 async def get_geoip(ip_addr: IPAddress) -> Union[City, None]:

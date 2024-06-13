@@ -6,7 +6,6 @@
 #
 """ASN Info Page."""
 
-import pprint
 
 from starlette_wtf import csrf_protect
 
@@ -14,7 +13,6 @@ from ipwebtools.bgpview import get_bgpview_asn_info, get_bgpview_asn_ix_info
 from ipwebtools.forms import ASNInfoForm
 from ipwebtools.templates import templates
 
-pp = pprint.PrettyPrinter(indent=2, width=120)
 
 @csrf_protect
 async def asn_info(request):
@@ -26,7 +24,7 @@ async def asn_info(request):
     if await form.validate_on_submit():
         try:
             results = await get_bgpview_asn_info(form.asn.data)
-            results['ixs'] = await get_bgpview_asn_ix_info(form.asn.data)
+            results["ixs"] = await get_bgpview_asn_ix_info(form.asn.data)
 
         except ValueError:
             form.asn.errors.append("Invalid ASN.")

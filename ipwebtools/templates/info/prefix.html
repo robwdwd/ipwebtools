@@ -62,6 +62,12 @@
                 </div>
               </div>
             </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Country</p>
+                <p class="title is-4">{{ results.info.country_codes.whois_country_code|isocountrytoname }}</p>
+              </div>
+            </div>
           {% endif %}
 
           <div class="level-item has-text-centered">
@@ -95,12 +101,6 @@
             </div>
           {% endif %}
 
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Total Addresses</p>
-              <p class="title is-4">{{ results.total_ips }}</p>
-            </div>
-          </div>
         </nav>
 
         <div class="columns mb-4">
@@ -124,14 +124,14 @@
                     {% if results.info.rir_allocation.date_allocated %}
                       <tr>
                         <th>Date Allocated</th>
-                        <td>{{ results.info.rir_allocation.date_allocated }}</td>
+                        <td>{{ results.info.rir_allocation.date_allocated|string_to_date }}</td>
                       </tr>
                     {% endif %}
                   {% endif %}
                   {% if results.info.date_updated %}
                     <tr>
                       <th>Last Updated</th>
-                      <td>{{ results.info.date_updated }}</td>
+                      <td>{{ results.info.date_updated|string_to_date }}</td>
                     </tr>
                   {% endif %}
 
@@ -157,6 +157,10 @@
                 <tr>
                   <th>Host/Wildcard Mask</th>
                   <td>{{ results.host_mask }}</td>
+                </tr>
+                <tr>
+                  <th>Total Addresses</th>
+                  <td>{{ results.total_ips|intword }}</td>
                 </tr>
               </tbody>
             </table>
@@ -229,6 +233,7 @@
                   <tr>
                     <td>
                       <span class="fi fi-{{ asn.country_code|lower }}"></span>
+                      {{ asn.country_code|isocountrytoname }}
                     </td>
                     <td>AS{{ asn.asn }}</td>
 

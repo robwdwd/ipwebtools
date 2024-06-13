@@ -6,6 +6,17 @@
 #
 """Create Jinja2 Templates."""
 
+from humanize import intword
 from starlette.templating import Jinja2Templates
 
+from ipwebtools.jinja2.isotocountry import iso_code_to_country
+from ipwebtools.jinja2.mpbstohuman import format_megabits_per_second
+from ipwebtools.jinja2.strtodate import string_to_date
+
 templates = Jinja2Templates(directory="ipwebtools/templates")
+
+
+templates.env.filters["mbps"] = format_megabits_per_second
+templates.env.filters["isocountrytoname"] = iso_code_to_country
+templates.env.filters["intword"] = intword
+templates.env.filters["string_to_date"] = string_to_date

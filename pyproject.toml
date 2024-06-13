@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipwebtools"
-version = "1.2.3"
+version = "2.0.0"
 description = "IP Web Tools for manipulation and information in IP Addresses, CIDRs, Subnets and Ranges."
 authors = ["Rob Woodward <rob@emailplus.org>"]
 license = "BSD-2-Clause"
@@ -18,7 +18,8 @@ Starlette-WTF = "^0.4.3"
 netaddr = "^1.2.1"
 geoip2 = "^4.4.0"
 httpx = "^0.27.0"
-humanreadable = "^0.4.0"
+pycountry = "^24.6.1"
+humanize = "^4.9.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.0"

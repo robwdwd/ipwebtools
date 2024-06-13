@@ -9,12 +9,13 @@ import re
 
 from netaddr import AddrFormatError, IPGlob, IPNetwork, IPRange, IPSet
 from starlette_wtf import csrf_protect
+from wtforms import TextAreaField
 
 from ipwebtools.forms import CidrMergeForm
 from ipwebtools.templates import templates
 
 
-def ipset_to_cidr_list(ip_set_from):
+def ipset_to_cidr_list(ip_set_from: IPSet) -> list:
     """Convert an IP Set into a list of cidrs.
 
     Args:
@@ -30,7 +31,7 @@ def ipset_to_cidr_list(ip_set_from):
     return to_list
 
 
-def ipset_to_range_list(ip_set_from):
+def ipset_to_range_list(ip_set_from: IPSet) -> list:
     """Convert an IP Set into a list of ip ranges.
 
     Args:
@@ -46,16 +47,16 @@ def ipset_to_range_list(ip_set_from):
     return to_list
 
 
-def parse_networks(form_field):
+def parse_networks(form_field: TextAreaField) -> IPSet:
     """Parse networks from form textarea.
 
     Args:
-        form_field (FormField): WTForms FormField
+        form_field (TextAreaField): WTForms TextAreaField
 
     Returns:
         IPSet: IPSet with the networks
     """
-    nets = list(filter(None, re.split(r"[\s,]+", form_field.data)))
+    nets = list(filter(None, re.split(r"[\s,]+", str(form_field.data))))
 
     nets_set = IPSet([])
 

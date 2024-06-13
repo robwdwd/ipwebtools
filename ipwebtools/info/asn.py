@@ -23,7 +23,8 @@ async def asn_info(request):
 
     if await form.validate_on_submit():
         try:
-            results = await get_bgpview_asn_info(form.asn.data)
+            asn_int = int(form.asn.data)
+            results = await get_bgpview_asn_info(asn_int)
             results["ixs"] = await get_bgpview_asn_ix_info(form.asn.data)
 
         except ValueError:

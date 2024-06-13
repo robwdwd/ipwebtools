@@ -98,7 +98,8 @@ async def ip_info(request):
 
     if await form.validate_on_submit():
         try:
-            ipaddress = IPAddress(form.ipaddress.data)
+            ip_str = str(form.ipaddress.data)
+            ipaddress = IPAddress(ip_str.strip())
 
             results["ipaddress"] = str(ipaddress)
 
@@ -107,9 +108,7 @@ async def ip_info(request):
 
             results["info"] = await get_ip_info(ipaddress)
 
-        except AddrFormatError as error:
-            form.ipaddress.errors.append(error)
-        except ValueError:
-            form.ipaddress.errors.append("Invalid IP Address.")
+        except (AddrFormatError, ValueError):
+            form.ipaddress.errors.append(f"{form.ipaddress.data} is not a valid IP Address.")
 
     return templates.TemplateResponse("info/ip.html", {"request": request, "results": results, "form": form})

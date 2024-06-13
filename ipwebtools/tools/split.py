@@ -13,7 +13,7 @@ from ipwebtools.forms import CidrSplitForm
 from ipwebtools.templates import templates
 
 
-def validate_split_fields(form):
+def validate_split_fields(form: CidrSplitForm):
     """Validate fields on the CIDR split form.
 
     Args:
@@ -25,7 +25,9 @@ def validate_split_fields(form):
     to_prefix_len = int(form.mask.data)
 
     try:
-        cidr = IPNetwork(form.network.data)
+        cidr_str = str(form.network.data)
+        cidr = IPNetwork(cidr_str.strip())
+
         if cidr.version == 4:
             if to_prefix_len > 32:
                 form.mask.errors.append("Invalid prefix length for IPv4 CIDR.")
@@ -37,8 +39,8 @@ def validate_split_fields(form):
 
         return cidr.subnet(to_prefix_len)
 
-    except AddrFormatError as error:
-        form.network.errors.append(error)
+    except (AddrFormatError, ValueError):
+        form.network.errors.append(f"{form.network.data} is not a valid IP Prefix")
         return
 
 

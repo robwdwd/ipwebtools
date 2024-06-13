@@ -47,7 +47,8 @@ async def prefix_info(request):
 
     if await form.validate_on_submit():
         try:
-            cidr = IPNetwork(form.network.data)
+            cidr_str = str(form.network.data)
+            cidr = IPNetwork(cidr_str.strip())
 
             # If IP input is not on bitmask boundry 10.1.1.1/24
             results["cidr"] = cidr.cidr
@@ -67,7 +68,7 @@ async def prefix_info(request):
             # First and last usable addresses
             (results["first"], results["last"]) = get_useable(cidr)
 
-        except AddrFormatError as error:
-            form.network.errors.append(error)
+        except (AddrFormatError, ValueError):
+            form.network.errors.append(f"{form.network.data} is not a valid IP Prefix")
 
     return templates.TemplateResponse("info/prefix.html", {"request": request, "results": results, "form": form})

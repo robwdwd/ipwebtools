@@ -19,8 +19,11 @@ def format_megabits_per_second(mbps: int, precision: Union[int, None] = None) ->
         precision (Union[int, None], optional): The number of decimal places to round to. Defaults to None.
 
     Returns:
-        str: The formatted speed with the appropriate unit (Mbps, Gbps, Tbps, or Pbps).
+        str: The formatted speed with the appropriate unit (Mbps, Gbps, Tbps, or Pbps) or empty string if mbps is zero
     """
+
+    if not mbps:
+        return ""
 
     units = [" Mbps", " Gbps", " Tbps", " Pbps"]
     exp = int(math.floor(math.log(mbps, 1000)))

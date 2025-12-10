@@ -1,9 +1,9 @@
 [project]
 name = "ipwebtools"
-version = "2.0.6"
+version = "2.1.0"
 description = "IP Web Tools for manipulation and information in IP Addresses, CIDRs, Subnets and Ranges."
 
-authors = [{ name = "Rob Woodward", email = "rob@emailplus.org" }]
+authors = [{ name = "Rob Woodward", email = "rob@twfmail.uk" }]
 
 license = "BSD-2-Clause"
 readme = "README.md"
@@ -20,7 +20,7 @@ dependencies = [
     "geoip2<6.0.0,>=5.1.0",
     "httpx<1.0.0,>=0.28.0",
     "pycountry<25.0.0,>=24.6.1",
-    "humanize<5.0.0,>=4.9.0",
+    "humanize<5.0.0,>=4.9.0"
 ]
 
 [project.urls]

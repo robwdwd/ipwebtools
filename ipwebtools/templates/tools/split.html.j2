@@ -1,8 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
-{% block title %}
-  Network Prefix Split Tool
-{% endblock %}
+{% block title %}Network Prefix Split Tool{% endblock %}
 
 {% block content %}
   <div class="columns is-tablet">
@@ -11,7 +9,8 @@
         <header class="card-header">
           <button class="card-header-icon" aria-label="more options">
             <span class="icon">
-              <i class="fa-solid fa-table-list"></i></span></button>
+              <i class="fa-solid fa-table-list"></i></span>
+          </button>
           <p class="card-header-title">Prefix Split</p>
         </header>
         <div class="card-content">
@@ -33,9 +32,7 @@
               </div>
               {% if form.network.errors %}
                 <p class="help is-danger">
-                  {% for error in form.network.errors %}
-                    {{ error }}
-                  {% endfor %}
+                  {% for error in form.network.errors %}{{ error }}{% endfor %}
                 </p>
               {% endif %}
             </div>
@@ -54,9 +51,7 @@
               </div>
               {% if form.mask.errors %}
                 <p class="help is-danger">
-                  {% for error in form.mask.errors %}
-                    {{ error }}
-                  {% endfor %}
+                  {% for error in form.mask.errors %}{{ error }}{% endfor %}
                 </p>
               {% endif %}
             </div>
@@ -75,9 +70,13 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">Results</p>
-            <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_output">
+            <button class="btn-copy card-header-icon has-text-grey-light"
+                    aria-label="Copy to Clipboard"
+                    title="Copy to clipboard"
+                    data-clipboard-target="#copy_output">
               <span class="icon">
-                <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+                <i class="fa-solid fa-copy" aria-hidden="true"></i></span>
+            </button>
           </header>
           <div class="card-content">
             <div class="content">

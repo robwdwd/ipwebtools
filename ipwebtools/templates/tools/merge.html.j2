@@ -1,8 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
-{% block title %}
-  IP Prefix Merge tool
-{% endblock %}
+{% block title %}IP Prefix Merge tool{% endblock %}
 
 {% block content %}
   <div class="columns is-tablet">
@@ -11,7 +9,8 @@
         <header class="card-header">
           <button class="card-header-icon" aria-label="more options">
             <span class="icon">
-              <i class="fa-solid fa-table-list"></i></span></button>
+              <i class="fa-solid fa-table-list"></i></span>
+          </button>
           <p class="card-header-title">IP Prefix Merge</p>
         </header>
         <div class="card-content">
@@ -34,9 +33,7 @@
               </div>
               {% if form.networks.errors %}
                 <p class="help is-danger">
-                  {% for error in form.networks.errors %}
-                    {{ error }}
-                  {% endfor %}
+                  {% for error in form.networks.errors %}{{ error }}{% endfor %}
                 </p>
               {% endif %}
             </div>
@@ -52,9 +49,7 @@
               </div>
               {% if form.excluded.errors %}
                 <p class="help is-danger">
-                  {% for error in form.excluded.errors %}
-                    {{ error }}
-                  {% endfor %}
+                  {% for error in form.excluded.errors %}{{ error }}{% endfor %}
                 </p>
               {% endif %}
             </div>
@@ -76,7 +71,8 @@
               <div class="content is-small">
                 <ul>
                   <li>
-                    IP Prefixes<ul>
+                    IP Prefixes
+                    <ul>
                       <li>192.168.0.0/24</li>
                       <li>172.16.0.129/27 - Works out correct boundry (i.e .128 here.)</li>
                       <li>8.8.8.8/32 - Accepts host addresses in CIDR format.</li>
@@ -85,7 +81,8 @@
                     </ul>
                   </li>
                   <li>
-                    Hosts<ul>
+                    Hosts
+                    <ul>
                       <li>192.168.0.1</li>
                       <li>8.8.8.4</li>
                       <li>2606:4700:4700::1001</li>
@@ -98,7 +95,8 @@
               <div class="content is-small">
                 <ul>
                   <li>
-                    IP Ranges<ul>
+                    IP Ranges
+                    <ul>
                       <li>192.168.0.0-192.168.0.255 - Can be on bitmask boundry.</li>
                       <li>172.16.0.128-172.16.0.140 - Can be off bitbask boundry.</li>
                       <li>127.255.255.0-128.0.1.255 - Can overlap subnets.</li>
@@ -106,7 +104,8 @@
                     </ul>
                   </li>
                   <li>
-                    IP Glob Patterns (IPv4 only)<ul>
+                    IP Glob Patterns (IPv4 only)
+                    <ul>
                       <li>172.16.*.*</li>
                       <li>192.168.1.*</li>
                       <li>10.50.1-5.*</li>
@@ -125,9 +124,13 @@
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">IP Prefix Results</p>
-                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_cidrs">
+                <button class="btn-copy card-header-icon has-text-grey-light"
+                        aria-label="Copy to Clipboard"
+                        title="Copy to clipboard"
+                        data-clipboard-target="#copy_cidrs">
                   <span class="icon">
-                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span>
+                </button>
               </header>
               <div class="card-content">
                 <div class="content">
@@ -142,9 +145,13 @@
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">IP Range Results</p>
-                <button class="btn-copy card-header-icon has-text-grey-light" aria-label="Copy to Clipboard" title="Copy to clipboard" data-clipboard-target="#copy_ranges">
+                <button class="btn-copy card-header-icon has-text-grey-light"
+                        aria-label="Copy to Clipboard"
+                        title="Copy to clipboard"
+                        data-clipboard-target="#copy_ranges">
                   <span class="icon">
-                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span></button>
+                    <i class="fa-solid fa-copy" aria-hidden="true"></i></span>
+                </button>
               </header>
               <div class="card-content">
                 <div class="content">

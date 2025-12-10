@@ -17,7 +17,7 @@ from ipwebtools.templates import templates
 
 async def http_exception(request: Request, exc: HTTPException):
     return templates.TemplateResponse(
-        "errors/generic.html", {"request": request, "error": exc.detail}, status_code=exc.status_code
+        "errors/generic.html.j2", {"request": request, "error": exc.detail}, status_code=exc.status_code
     )
 
 

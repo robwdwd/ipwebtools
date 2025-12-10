@@ -18,4 +18,4 @@ async def home(request):
     Returns:
        string: HTML Page
     """
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html.j2", {"request": request})

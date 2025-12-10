@@ -1,9 +1,5 @@
-{% extends 'base.html' %}
-
-{% block title %}
-  IP Address Info
-{% endblock %}
-
+{% extends 'base.html.j2' %}
+{% block title %}IP Address Info{% endblock %}
 {% block content %}
   <div class="columns is-tablet">
     <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
@@ -11,14 +7,14 @@
         <header class="card-header">
           <button class="card-header-icon" aria-label="more options">
             <span class="icon">
-              <i class="fa-solid fa-table-list"></i></span></button>
+              <i class="fa-solid fa-table-list"></i></span>
+          </button>
           <p class="card-header-title">IP Address Info</p>
         </header>
         <div class="card-content">
           <p class="subtitle is-7">Get information about an IP Address</p>
           <form method="post">
             {{ form.csrf_token }}
-
             <div class="field">
               {{ form.ipaddress.label(class = 'label') }}
               <div class="control is-expanded has-icons-left">
@@ -33,13 +29,10 @@
               </div>
               {% if form.ipaddress.errors %}
                 <p class="help is-danger">
-                  {% for error in form.ipaddress.errors %}
-                    {{ error }}
-                  {% endfor %}
+                  {% for error in form.ipaddress.errors %}{{ error }}{% endfor %}
                 </p>
               {% endif %}
             </div>
-
             <div class="field">
               <div class="control">
                 <button class="button is-dark">Submit</button>
@@ -57,18 +50,17 @@
               <div class="level-item has-text-centered">
                 <div>
                   <p class="title">
-                    <span class="fi fi-{{ results.info.country.code|lower }}"></span></p>
+                    <span class="fi fi-{{ results.info.country.code|lower }}"></span>
+                  </p>
                 </div>
               </div>
             </div>
-
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Country</p>
                 <p class="title is-4">{{ results.info.country.name }}</p>
               </div>
             </div>
-
             {% if results.info.city %}
               <div class="level-item has-text-centered">
                 <div>
@@ -78,78 +70,56 @@
               </div>
             {% endif %}
           {% endif %}
-
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">IP Address</p>
               <p class="title is-4">{{ results.ipaddress }}</p>
             </div>
           </div>
-
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">IP Version</p>
               <p class="title is-4">IPv{{ results.version }}</p>
             </div>
           </div>
-
-          {% if results.info and results.info.description_short %}
+          {% if results.info and results.info.asnName %}
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Name</p>
-                <p class="title is-4">{{ results.info.name }}</p>
+                <p class="title is-4">{{ results.info.asnName }}</p>
               </div>
             </div>
           {% endif %}
-
-          {% if results.info.rir and results.info.rir.rir_name %}
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">RIR</p>
-                <p class="title is-4">{{ results.info.rir.rir_name }}</p>
-              </div>
-            </div>
-          {% endif %}
-
         </nav>
-
         <div class="columns mb-4">
           {% if results.info %}
             <div class="column">
               <table class="table is-fullwidth">
                 <tbody>
-                  {% if results.info.org %}
+                  {% if results.info.asnOrgName %}
                     <tr>
                       <th>Organisation</th>
-                      <td>{{ results.info.org }}</td>
+                      <td>{{ results.info.asnOrgName }}</td>
                     </tr>
                   {% endif %}
-
-                  {% if results.info.rir %}
-                    {% if results.info.rir.allocation_status %}
-                      <tr>
-                        <th>Status</th>
-                        <td>{{ results.info.rir.allocation_status|capitalize }}</td>
-                      </tr>
-                    {% endif %}
-                    {% if results.info.rir.date_allocated %}
-                      <tr>
-                        <th>Date Allocated</th>
-                        <td>{{ results.info.rir.date_allocated|string_to_date }}</td>
-                      </tr>
-                    {% endif %}
-                  {% endif %}
-                  {% if results.info.ptr_record %}
+                  {% if results.info.asn %}
                     <tr>
-                      <th>Reverse DNS</th>
-                      <td>{{ results.info.ptr_record }}</td>
+                      <th>ASN</th>
+                      <td>{{ results.info.asn }}</td>
                     </tr>
                   {% endif %}
-
+                  {% if results.info.asnLocation %}
+                    <tr>
+                      <th>ASN Location</th>
+                      <td>
+                        <span class="fi fi-{{ results.info.asnLocation|lower }} mr-2"></span>
+                        {{ results.info.asnLocationName }}
+                      </td>
+                    </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
-
             <div class="column">
               <table class="table is-fullwidth">
                 <tbody>
@@ -159,21 +129,18 @@
                       <td>{{ results.info.network }}</td>
                     </tr>
                   {% endif %}
-
                   {% if results.info.region %}
                     <tr>
                       <th>Region</th>
                       <td>{{ results.info.region }}</td>
                     </tr>
                   {% endif %}
-
                   {% if results.info.continent and results.info.continent.name %}
                     <tr>
                       <th>Continent</th>
                       <td>{{ results.info.continent.name }}</td>
                     </tr>
                   {% endif %}
-
                   {% if results.info.timezone %}
                     <tr>
                       <th>Timezone</th>
@@ -183,7 +150,8 @@
                   {% if results.info.location and results.info.location.latitude and results.info.location.longitude %}
                     <tr>
                       <th>Coordinates</th>
-                      <td>{{ results.info.location.latitude }}
+                      <td>
+                        {{ results.info.location.latitude }}
                         /
                         {{ results.info.location.longitude }}
                       </td>
@@ -192,41 +160,8 @@
                 </tbody>
               </table>
             </div>
-
           {% endif %}
         </div>
-
-        {% if results.info.prefixes %}
-          <h5 class="title is-5">Matching Prefixes</h5>
-          <table class="table is-hoverable is-fullwidth is-bordered is-striped is-narrow">
-            <thead>
-              <th>Prefix</th>
-              <th>Country</th>
-              <th>Prefix Name</th>
-              <th>Prefix Description</th>
-              <th>ASN</th>
-              <th>ASN Country</th>
-              <th>ASN Name</th>
-              <th>ASN Description</th>
-            </thead>
-            <tbody>
-              {% for prefix in results.info.prefixes %}
-                <tr>
-                  <td>{{ prefix.prefix }}</td>
-                  <td>
-                    <span title="{{ prefix.country_code|isocountrytoname }}" class="fi fi-{{ prefix.country_code|lower }}"></span></td>
-                  <td>{{ prefix.name }}</td>
-                  <td>{{ prefix.description }}</td>
-                  <td>AS{{ prefix.asn.asn }}</td>
-                  <td>
-                    <span title="{{ prefix.asn.country_code|isocountrytoname }}" class="fi fi-{{ prefix.asn.country_code|lower }}"></span></td>
-                  <td>{{ prefix.asn.name }}</td>
-                  <td>{{ prefix.asn.description }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% endif %}
       {% endif %}
     </div>
   </div>

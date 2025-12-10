@@ -1,0 +1,180 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}ASN Info{% endblock %}
+
+{% block content %}
+  <div class="columns is-tablet">
+    <div class="column is-one-third is-one-quarter-desktop is-one-fifth-fullhd">
+      <div class="card">
+        <header class="card-header">
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fa-solid fa-table-list"></i></span>
+          </button>
+          <p class="card-header-title">ASN Info</p>
+        </header>
+        <div class="card-content">
+          <p class="subtitle is-7">Get information about an ASN.</p>
+          <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="field">
+              {{ form.asn.label(class = 'label') }}
+              <div class="control is-expanded has-icons-left">
+                {% if form.asn.errors %}
+                  {{ form.asn(class = 'input is-danger') }}
+                {% else %}
+                  {{ form.asn(class = 'input') }}
+                {% endif %}
+                <span class="icon is-small is-left">
+                  <i class="fa-solid fa-server"></i>
+                </span>
+              </div>
+              {% if form.asn.errors %}
+                <p class="help is-danger">
+                  {% for error in form.asn.errors %}{{ error }}{% endfor %}
+                </p>
+              {% endif %}
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button class="button is-dark">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      {% if results %}
+
+        <nav class="level mb-6">
+          {% if results.country %}
+            <div class="level-left">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="title">
+                    <span class="fi fi-{{ results.country|lower }}"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Country</p>
+                <p class="title is-4">{{ results.countryName }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">ASN</p>
+              <p class="title is-4">{{ results.asn }}</p>
+            </div>
+          </div>
+
+          {% if results.name %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Name</p>
+                <p class="title is-4">{{ results.name }}</p>
+              </div>
+            </div>
+          {% endif %}
+          {% if results.source %}
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Source</p>
+                <p class="title is-4">{{ results.source }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </nav>
+
+        <div class="columns mb-4">
+          <div class="column">
+            <table class="table is-fullwidth">
+              <tbody>
+                {% if results.aka %}
+                  <tr>
+                    <th>AKA</th>
+                    <td>{{ results.aka }}</td>
+                  </tr>
+                {% endif %}
+                {% if results.orgName %}
+                  <tr>
+                    <th>Org Name</th>
+                    <td>{{ results.orgName }}</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="column">
+            <table class="table is-fullwidth">
+              <tbody>
+                {% if results.website %}
+                  <tr>
+                    <th>Website</th>
+                    <td>
+                      <a href="{{ results.website }}" target="_BLANK">{{ results.website }}</a>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if results.estimatedUsers and results.estimatedUsers.estimatedUsers %}
+                  <tr>
+                    <th>Estimated Users</th>
+                    <td>{{ results.estimatedUsers.estimatedUsers }}</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {% if results.related %}
+          <h5 class="title is-5">Related ASNs</h5>
+          <table class="table is-hoverable is-fullwidth is-bordered is-striped is-narrow">
+            <thead>
+              <th>ASN</th>
+              <th>Name</th>
+              <th>AKA</th>
+            </thead>
+            <tbody>
+              {% for asn in results.related %}
+                <tr>
+                  <td>AS{{ asn.asn }}</td>
+                  <td>{{ asn.name }}</td>
+                  <td>{{ asn.aka }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+
+        {% if results.estimatedUsers and  results.estimatedUsers.locations %}
+          <h5 class="title is-5">Estimated Users</h5>
+          <table class="table is-hoverable is-fullwidth is-bordered is-striped is-narrow">
+            <thead>
+              <th>Location</th>
+              <th>Users</th>
+            </thead>
+            <tbody>
+              {% for location in results.estimatedUsers.locations %}
+                <tr>
+                  <td>
+                    <span class="fi fi-{{ location.locationAlpha2|lower }} mr-2"></span>{{ location.locationName }}
+                  </td>
+                  <td>{{ location.estimatedUsers }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

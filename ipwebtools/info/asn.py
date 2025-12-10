@@ -10,7 +10,7 @@
 from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
-from ipwebtools.bgpview import get_bgpview_asn_info, get_bgpview_asn_ix_info
+from ipwebtools.cfradar import get_cfradar_asn_info
 from ipwebtools.forms import ASNInfoForm
 from ipwebtools.templates import templates
 
@@ -25,10 +25,9 @@ async def asn_info(request: Request):
     if await form.validate_on_submit():
         try:
             asn_int = int(form.asn.data)
-            results = await get_bgpview_asn_info(asn_int)
-            results["ixs"] = await get_bgpview_asn_ix_info(form.asn.data)
+            results = await get_cfradar_asn_info(asn_int)
 
         except ValueError:
             form.asn.errors.append("Invalid ASN.")
 
-    return templates.TemplateResponse("info/asn.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("info/asn.html.j2", {"request": request, "results": results, "form": form})

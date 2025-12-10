@@ -53,4 +53,4 @@ async def split(request: Request):
     if await form.validate_on_submit():
         results = validate_split_fields(form)
 
-    return templates.TemplateResponse("tools/split.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("tools/split.html.j2", {"request": request, "results": results, "form": form})

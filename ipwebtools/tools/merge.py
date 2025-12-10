@@ -101,4 +101,4 @@ async def merge(request: Request):
             results["cidrs"] = ipset_to_cidr_list(new_cidrs)
             results["ranges"] = ipset_to_range_list(new_cidrs)
 
-    return templates.TemplateResponse("tools/merge.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("tools/merge.html.j2", {"request": request, "results": results, "form": form})

@@ -10,8 +10,9 @@ from netaddr import AddrFormatError, IPAddress, IPNetwork
 from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
-from ipwebtools.bgpview import get_bgpview_prefix_info
+from ipwebtools.cfradar import get_cfradar_prefix_info
 from ipwebtools.forms import PrefixInfoForm
+from ipwebtools.settings import CFRADAR_ENABLED
 from ipwebtools.templates import templates
 
 
@@ -36,9 +37,14 @@ async def process_ip_prefix(ip_prefix: str) -> dict:
 
     first, last = get_useable(ip_network)
 
+    info = {}
+
+    if CFRADAR_ENABLED:
+        info = await get_cfradar_prefix_info(str(ip_network.cidr))
+
     return {
         "cidr": ip_network.cidr,
-        "info": await get_bgpview_prefix_info(str(ip_network.cidr)),
+        "info": info,
         "version": ip_network.version,
         "total_ips": ip_network.size,
         "network_mask": ip_network.netmask,
@@ -62,4 +68,4 @@ async def prefix_info(request: Request):
         except (AddrFormatError, ValueError):
             form.network.errors.append(f"{form.network.data} is not a valid IP Prefix")
 
-    return templates.TemplateResponse("info/prefix.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("info/prefix.html.j2", {"request": request, "results": results, "form": form})

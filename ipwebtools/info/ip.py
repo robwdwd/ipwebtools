@@ -7,6 +7,8 @@
 """IP Info Page."""
 
 
+
+import pycountry
 from geoip2.errors import GeoIP2Error
 from geoip2.records import Subdivision
 from geoip2.webservice import AsyncClient
@@ -14,10 +16,32 @@ from netaddr import AddrFormatError, IPAddress
 from starlette.requests import Request
 from starlette_wtf import csrf_protect
 
-from ipwebtools.bgpview import get_bgpview_ip_info
+from ipwebtools.cfradar import get_cfradar_ip_info
 from ipwebtools.forms import IPInfoForm
-from ipwebtools.settings import GEOIP_API_KEY, GEOIP_ENABLED, GEOIP_HOST, GEOIP_USER_ID
+from ipwebtools.settings import (
+    CFRADAR_ENABLED,
+    GEOIP_API_KEY,
+    GEOIP_ENABLED,
+    GEOIP_HOST,
+    GEOIP_USER_ID,
+)
 from ipwebtools.templates import templates
+
+
+def get_country_name(country_code: str) -> str:
+    """Get full country name from ISO country code.
+
+    Args:
+        country_code (str): ISO 2-letter country code (e.g., 'US', 'GB', 'FR')
+
+    Returns:
+        str: Full country name, or the original code if not found
+    """
+    try:
+        country = pycountry.countries.get(alpha_2=country_code)
+        return country.name if country else country_code
+    except (AttributeError, KeyError):
+        return country_code
 
 
 def format_subdiv(subdiv: Subdivision) -> str:
@@ -70,11 +94,18 @@ async def get_ip_info(ip_address: str) -> dict:
         dict: IP Information
     """
     ipdata = {}
+    if CFRADAR_ENABLED:
+        cfradar_data = await get_cfradar_ip_info(ip_address)
 
-    bgpview_data = await get_bgpview_ip_info(ip_address)
-
-    if bgpview_data:
-        ipdata |= {"ptr_record": bgpview_data["ptr_record"], "prefixes": bgpview_data["prefixes"], "rir": bgpview_data["rir_allocation"]}
+        if cfradar_data:
+            asn_location = cfradar_data.get("asnLocation")
+            ipdata |= {
+                "asn": cfradar_data.get("asn"),
+                "asnLocation": asn_location,
+                "asnLocationName": get_country_name(asn_location) if asn_location else asn_location,
+                "asnName": cfradar_data.get("asnName"),
+                "asnOrgName": cfradar_data.get("asnOrgName"),
+            }
 
     # Get Data from Maxmind and merge it with our data.
     if GEOIP_ENABLED:
@@ -99,4 +130,4 @@ async def ip_info(request: Request):
         except (AddrFormatError, ValueError):
             form.ipaddress.errors.append(f"{form.ipaddress.data} is not a valid IP Address.")
 
-    return templates.TemplateResponse("info/ip.html", {"request": request, "results": results, "form": form})
+    return templates.TemplateResponse("info/ip.html.j2", {"request": request, "results": results, "form": form})

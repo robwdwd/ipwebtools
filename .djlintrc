@@ -1,0 +1,9 @@
+{
+    "extension": "html.j2",
+    "max_blank_lines": 1,
+    "max_line_length": "160",
+    "profile": "jinja",
+    "indent": "2",
+    "ignore": "T002,T003,H006,H013,H021,H005,H023",
+    "format_attribute_template_tags": true
+}

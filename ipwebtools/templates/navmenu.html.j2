@@ -1,10 +1,16 @@
-<nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
+<nav class="navbar is-fixed-top is-dark"
+     role="navigation"
+     aria-label="main navigation">
   <div class="navbar-brand">
     <div class="navbar-item">
       <span class="icon is-large"><i class="fa-solid fa-screwdriver-wrench fa-2xl"></i></span>
     </div>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarIPWT">
+    <a role="button"
+       class="navbar-burger"
+       aria-label="menu"
+       aria-expanded="false"
+       data-target="navbarIPWT">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -25,7 +31,9 @@
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Information</a>
         <div class="navbar-dropdown is-boxed">
+          {% if CFRADAR_ENABLED %}
           <a class="navbar-item" href="{{ url_for('asn_info') }}">ASN</a>
+          {% endif %}
           <a class="navbar-item" href="{{ url_for('ip_info') }}">IP Address</a>
           <a class="navbar-item" href="{{ url_for('prefix_info') }}">IP Prefix</a>
         </div>

@@ -26,10 +26,24 @@ root folder (not in the package folder.)
 Make sure to change the `SECRET_KEY` and `CSRF_SECRET` in the `.env` file
 and also set `DEBUG=False` for a production environment.
 
+#### Cloudflare Radar
+
+Additional information about IP prefixes, IP addresses and ASNs can be gathered
+from Cloudflare Radar.
+
+```ini
+CFRADAR_ENABLED=True
+CFRADAR_URL=https://api.cloudflare.com/client/v4/radar/
+CFRADAR_API_KEY=CFApISecrEt
+```
+
+More information on Cloudflare Radar services are available [here](https://developers.cloudflare.com/radar/).
+You need to create an API key to use this service by following the
+[get started](https://developers.cloudflare.com/radar/get-started/) instructions.
+
 #### Maxmind GeoIP
 
-By default the IP Whois information is gathered on the IP Info tool. To add additional
-GeoIP information from Maxmind configure the following:
+To add additional GeoIP information from Maxmind configure the following:
 
 ```ini
 GEOIP_ENABLED=True
